@@ -1,37 +1,40 @@
-import { FileX, Clock, FolderSearch } from "lucide-react"
+import { FileSpreadsheet, Clock, AlertTriangle } from "lucide-react"
 
 const painPoints = [
   {
-    icon: FileX,
-    title: "Chega de checklists manuais",
+    icon: FileSpreadsheet,
+    title: "Planilhas e Notion improvisados",
     description:
-      "Pare de gerenciar onboarding com Notion, Trello ou planilhas improvisadas. Centralize tudo em um fluxo automatizado.",
+      "Cada gestor monta seu onboarding de um jeito diferente. Checklists se perdem entre Notion, Trello e Google Sheets. O novo colaborador fica sem saber o que fazer.",
   },
   {
     icon: Clock,
-    title: "Sem mais primeira semana ociosa",
+    title: "Primeira semana desperdicada",
     description:
-      "Evite que novos contratados fiquem sem direcionamento. Cada tarefa é entregue no momento certo, automaticamente.",
+      "Sem um fluxo estruturado, o novo contratado passa dias esperando acessos, documentos e orientações. O tempo de ramp-up dispara e a produtividade despenca.",
   },
   {
-    icon: FolderSearch,
-    title: "Documentos e acessos centralizados",
+    icon: AlertTriangle,
+    title: "Gestor sem visibilidade",
     description:
-      "Todos os documentos, credenciais e recursos que o novo colaborador precisa, organizados em um único fluxo.",
+      "Quem está travado? Qual tarefa é gargalo? O RH e os gestores não têm como saber sem perguntar um por um. Problemas só aparecem quando já é tarde.",
   },
 ]
 
 export function PainPoints() {
   return (
-    <section className="py-20 md:py-28">
+    <section id="problema" className="py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-14 text-center">
           <p className="mb-3 text-sm font-medium tracking-wide text-primary uppercase">
             O problema
           </p>
           <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Onboarding manual custa caro
+            {"Onboarding manual custa tempo, dinheiro e talentos"}
           </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-pretty text-muted-foreground">
+            {"Empresas em crescimento perdem produtividade toda vez que um novo colaborador entra. O processo \u00e9 fragmentado, manual e invis\u00edvel para a gest\u00e3o."}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

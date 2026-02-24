@@ -18,20 +18,20 @@ export function Header() {
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
+          <a href="#problema" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            O Problema
+          </a>
           <a href="#funcionalidades" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
             Funcionalidades
           </a>
-          <a href="#precos" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            {"Pre\u00e7os"}
-          </a>
-          <a href="#depoimentos" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Depoimentos
+          <a href="#como-funciona" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Como Funciona
           </a>
         </div>
 
         <div className="hidden md:block">
           <Button size="lg" className="rounded-full">
-            Garantir Acesso Beta
+            Entrar na Lista de Espera
           </Button>
         </div>
 
@@ -48,6 +48,13 @@ export function Header() {
         <div className="border-t border-border/50 bg-background/95 backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-4 px-6 py-6">
             <a
+              href="#problema"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              O Problema
+            </a>
+            <a
               href="#funcionalidades"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
@@ -55,21 +62,14 @@ export function Header() {
               Funcionalidades
             </a>
             <a
-              href="#precos"
+              href="#como-funciona"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
-              {"Pre\u00e7os"}
-            </a>
-            <a
-              href="#depoimentos"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Depoimentos
+              Como Funciona
             </a>
             <Button size="lg" className="mt-2 w-full rounded-full">
-              Garantir Acesso Beta
+              Entrar na Lista de Espera
             </Button>
           </div>
         </div>

@@ -23,7 +23,7 @@ const painPoints = [
 
 export function PainPoints() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28" id="problema">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-14 text-center">
           <p className="mb-3 text-sm font-medium tracking-wide text-primary uppercase">

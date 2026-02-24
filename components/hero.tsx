@@ -75,9 +75,9 @@ export function Hero() {
 									</Button>
 								</div>
 
-								{state?.error && (
+								{state?.errors?.global && (
 									<p className="text-destructive text-xs mt-1 font-medium text-center px-4 animate-in slide-in-from-top-1">
-										{state.error}
+										{state.errors.global}
 									</p>
 								)}
 							</form>

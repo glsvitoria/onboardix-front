@@ -3,25 +3,31 @@
 import { ActionState } from '@/@types/action-state'
 import { z } from 'zod'
 
-const schema = z.object({
+const registerLeadSchema = z.object({
 	email: z.string().email('E-mail inválido'),
 })
 
-export async function registerLeadAction(
-	_prevState: ActionState | null,
-	formData: FormData
-) {
-	const email = formData.get('email')
+type State = ActionState<typeof registerLeadSchema>
 
-	const validatedFields = schema.safeParse({ email })
+export async function registerLeadAction(
+	_prevState: State | null,
+	formData: FormData
+): Promise<State> {
+	const rawInput = Object.fromEntries(formData.entries())
+	const validatedFields = registerLeadSchema.safeParse(rawInput)
 
 	if (!validatedFields.success) {
-		return { error: validatedFields.error.flatten().fieldErrors.email?.[0] }
+		return {
+			errors: {
+				global: validatedFields.error.flatten().fieldErrors.email?.[0],
+			},
+			inputs: rawInput,
+		}
 	}
 
 	try {
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/leads/registe`,
+			`${process.env.NEXT_PUBLIC_API_URL}/leads/register`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -29,16 +35,25 @@ export async function registerLeadAction(
 			}
 		)
 
+		const data = await response.json()
+
 		if (!response.ok) {
-			throw new Error('Falha na API')
+			return {
+				errors: {
+					global: data.message || 'Erro ao realizar o cadastro do lead.',
+				},
+				inputs: rawInput,
+			}
 		}
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
+		console.error('[RegisterLeadAction Error]', error)
 		return {
-			error:
-				'Tivemos um problema na hora de cadastrarmos seu interesse. Tente novamente.',
+			errors: {
+				global: 'Erro de conexão. Verifique sua internet e tente novamente.',
+			},
+			inputs: rawInput,
 		}
 	}
 }

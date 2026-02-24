@@ -1,4 +1,9 @@
-export interface ActionState {
+import { z } from 'zod'
+
+export interface ActionState<T extends z.ZodType<any, any, any>> {
 	success?: boolean
-	error?: string
+	errors?: z.inferFlattenedErrors<T>['fieldErrors'] & {
+		global?: string
+	}
+	inputs?: Partial<z.infer<T>>
 }

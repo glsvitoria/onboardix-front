@@ -7,5 +7,5 @@ import { redirect } from 'next/navigation'
 export async function logoutAction() {
 	const cookieStore = await cookies()
 	cookieStore.delete(ACCESS_TOKEN)
-	redirect('/login')
+	redirect('/auth')
 }

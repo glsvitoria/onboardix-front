@@ -1,49 +1,82 @@
 'use client'
 
-import { useState } from 'react'
 import { LogOut } from 'lucide-react'
 import { logoutAction } from '@/app/actions/logout'
+import { cn } from '@/lib/utils'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+	DialogFooter,
+	DialogClose,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
-export function LogoutButton() {
-	const [isOpen, setIsOpen] = useState(false)
+interface LogoutButtonProps {
+	className?: string
+	variant?: 'nav' | 'ghost'
+}
 
+export function LogoutButton({
+	className,
+	variant = 'nav',
+}: LogoutButtonProps) {
 	return (
-		<>
-			<button
-				onClick={() => setIsOpen(true)}
-				className="flex w-full items-center gap-3 px-4 py-3 rounded-2xl text-zinc-500 hover:bg-destructive/10 hover:text-destructive transition-colors cursor-pointer"
-			>
-				<LogOut size={20} />
-				Sair
-			</button>
+		<Dialog>
+			<DialogTrigger asChild>
+				{variant === 'nav' ? (
+					<button
+						className={cn(
+							'flex w-full items-center gap-3 px-4 py-3 rounded-2xl text-zinc-500 hover:bg-destructive/10 hover:text-destructive transition-colors cursor-pointer outline-none',
+							className
+						)}
+					>
+						<LogOut size={20} />
+						Sair
+					</button>
+				) : (
+					<Button
+						variant="ghost"
+						className={cn('text-zinc-500 hover:text-white gap-2', className)}
+					>
+						<LogOut size={18} /> Sair
+					</Button>
+				)}
+			</DialogTrigger>
 
-			{isOpen && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-					<div className="bg-[#09090b] border border-white/10 p-6 rounded-3xl w-full max-w-sm">
-						<h3 className="text-xl font-semibold text-zinc-100 mb-2">
-							Sair da conta?
-						</h3>
-						<p className="text-zinc-400 mb-6">
-							Sua sessão será encerrada e você voltará à tela de login.
-						</p>
+			<DialogContent className="bg-[#09090b] border-white/10 rounded-[32px] sm:rounded-[32px] max-w-sm">
+				<DialogHeader>
+					<DialogTitle className="text-xl font-bold text-zinc-100">
+						Sair da conta?
+					</DialogTitle>
+					<DialogDescription className="text-zinc-400">
+						Sua sessão será encerrada e você precisará fazer login novamente
+						para acessar seu onboarding.
+					</DialogDescription>
+				</DialogHeader>
 
-						<div className="flex gap-3">
-							<button
-								onClick={() => setIsOpen(false)}
-								className="flex-1 px-4 py-2 rounded-xl bg-white/5 text-zinc-300 hover:bg-white/10 cursor-pointer"
-							>
-								Cancelar
-							</button>
-							<button
-								onClick={async () => await logoutAction()}
-								className="flex-1 px-4 py-2 rounded-xl bg-destructive text-white hover:bg-destructive/90 cursor-pointer"
-							>
-								Confirmar
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
-		</>
+				<DialogFooter className="flex flex-row gap-3 mt-4">
+					<DialogClose asChild>
+						<Button
+							variant="secondary"
+							className="flex-1 bg-white/5 text-zinc-300 hover:bg-white/10 border-none rounded-xl"
+						>
+							Cancelar
+						</Button>
+					</DialogClose>
+
+					<Button
+						onClick={async () => await logoutAction()}
+						variant="destructive"
+						className="flex-1 rounded-xl font-bold"
+					>
+						Confirmar
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	)
 }

@@ -6,7 +6,7 @@ export function Sidebar() {
 	const menuItems = [
 		{ name: 'Início', icon: Home, href: '/dashboard', active: true },
 		{ name: 'Roteiros', icon: LayoutGrid, href: '/dashboard/roteiros' },
-		{ name: 'Equipe', icon: Users, href: '/dashboard/team' },
+		{ name: 'Equipe', icon: Users, href: '/dashboard/colaboradores' },
 		{ name: 'Ajustes', icon: Settings, href: '/dashboard/settings' },
 	]
 

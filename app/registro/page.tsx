@@ -33,7 +33,7 @@ export default function RegisterOrgPage() {
 								Sua organização foi criada. Você já pode acessar o dashboard.
 							</p>
 							<Button asChild className="mt-8 w-full rounded-full">
-								<Link href="/login">Ir para Login</Link>
+								<Link href="/auth">Ir para Login</Link>
 							</Button>
 						</div>
 					) : (
@@ -125,7 +125,7 @@ export default function RegisterOrgPage() {
 
 								<p className="text-center text-xs text-muted-foreground mt-4">
 									Já tem conta?{' '}
-									<Link href="/login" className="text-primary hover:underline">
+									<Link href="/auth" className="text-primary hover:underline">
 										Entre aqui
 									</Link>
 								</p>

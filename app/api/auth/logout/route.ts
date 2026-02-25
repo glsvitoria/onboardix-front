@@ -7,7 +7,7 @@ export async function GET(request: Request) {
 
 	cookieStore.delete(ACCESS_TOKEN)
 
-	const loginUrl = new URL('/login', request.url)
+	const loginUrl = new URL('/auth', request.url)
 	loginUrl.searchParams.set('session', 'expired')
 
 	return NextResponse.redirect(loginUrl)

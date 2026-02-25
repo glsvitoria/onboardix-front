@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { logoutAction } from '@/app/actions/logout'
-import { UserWithOrganization } from '@/@types/user'
+import { UserWithOrganization } from '@/types/user'
 
 interface TopHeaderProps {
 	user: UserWithOrganization

@@ -1,10 +1,12 @@
 'use server'
 
-import { ActionState } from '@/@types/action-state'
+import { ActionState } from '@/types/action-state'
 import { ACCESS_TOKEN } from '@/common/token'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { handleApiError } from '@/lib/api/handle-error'
 
 const loginSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -28,41 +30,25 @@ export async function loginAction(
 	}
 
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(validatedFields.data),
-			}
+		const { access_token } = await api.post<{ access_token: string }>(
+			'/auth/login',
+			validatedFields.data
 		)
 
-		const data = await response.json()
-
-		if (!response.ok) {
-			return {
-				errors: {
-					global: data.message || 'Ocorreu um erro ao realizar login',
-				},
-				inputs: rawInput,
-			}
-		}
-
 		const cookieStore = await cookies()
-		cookieStore.set(ACCESS_TOKEN, data.access_token, {
+
+		cookieStore.set(ACCESS_TOKEN, access_token, {
 			path: '/',
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
 			sameSite: 'lax',
 			maxAge: 60 * 60 * 24 * 7, // 7 dias
 		})
-	} catch (e) {
-		return {
-			errors: {
-				global: 'Erro de conexão. Verifique sua internet e tente novamente.',
-			},
+	} catch (error: any) {
+		return handleApiError({
+			error,
 			inputs: rawInput,
-		}
+		})
 	}
 
 	redirect('/dashboard')

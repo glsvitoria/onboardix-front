@@ -1,12 +1,11 @@
-import { UserWithOrganization } from '@/@types/user'
-import { Home, LayoutGrid, Users, Settings, LogOut } from 'lucide-react'
+import { Home, LayoutGrid, Users, Settings } from 'lucide-react'
 import Link from 'next/link'
-import { LogoutButton } from '../logout-button'
+import { LogoutButton } from './logout-button'
 
-export function Sidebar({ user }: { user: UserWithOrganization }) {
+export function Sidebar() {
 	const menuItems = [
 		{ name: 'Início', icon: Home, href: '/dashboard', active: true },
-		{ name: 'Roteiros', icon: LayoutGrid, href: '/dashboard/templates' },
+		{ name: 'Roteiros', icon: LayoutGrid, href: '/dashboard/roteiros' },
 		{ name: 'Equipe', icon: Users, href: '/dashboard/team' },
 		{ name: 'Ajustes', icon: Settings, href: '/dashboard/settings' },
 	]

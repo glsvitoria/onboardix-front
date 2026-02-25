@@ -6,7 +6,7 @@ export interface User {
 	fullName: string
 	role: UserRole
 	createdAt: Date
-	updatedAt: Date
+	updatedAt: Date | null
 	deletedAt: Date | null
 }
 

@@ -71,9 +71,9 @@ export function FinalCTA() {
 										</Button>
 									</div>
 
-									{state?.error && (
+									{state?.errors && (
 										<p className="text-destructive text-xs mt-1 font-medium animate-in slide-in-from-top-1">
-											{state.error}
+											{state.errors.global}
 										</p>
 									)}
 								</form>

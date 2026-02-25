@@ -1,36 +1,34 @@
-import { getSession } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import { Users, CheckCircle2, BarChart3, TrendingUp } from 'lucide-react'
-import { DashboardData, OrganizationReport } from '@/@types/dashboard'
+import { DashboardData, OrganizationReport } from '@/types/dashboard'
+import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { StatCard } from './components/stat-card'
 
-async function getDashboardData(token: string) {
-	const [statsRes, reportRes] = await Promise.all([
-		fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/general-stats`, {
-			headers: { Authorization: `Bearer ${token}` },
-			next: { revalidate: 60 }, // Cache de 1 minuto
+async function getDashboardData() {
+	const [stats, reports] = await Promise.all([
+		api.get<DashboardData>('/dashboard/general-stats', {
+			next: {
+				revalidate: 60,
+			},
 		}),
-		fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/organization-report`, {
-			headers: { Authorization: `Bearer ${token}` },
-			next: { revalidate: 60 },
+		api.get<OrganizationReport>('/dashboard/organization-report', {
+			next: {
+				revalidate: 60,
+			},
 		}),
 	])
 
-	if (!statsRes.ok || !reportRes.ok) return null
-
 	return {
-		stats: (await statsRes.json()) as DashboardData,
-		report: (await reportRes.json()) as OrganizationReport,
+		stats,
+		reports,
 	}
 }
 
 export default async function DashboardPage() {
-	const data = await getSession()
-	if (!data?.token) redirect('/login')
+	const dashboardData = await getDashboardData()
 
-	const dashboardData = await getDashboardData(data.token)
 	if (!dashboardData) return <div>Erro ao carregar dados...</div>
 
-	const { stats, report } = dashboardData
+	const { stats, reports } = dashboardData
 
 	return (
 		<div className="p-8 space-y-8">
@@ -63,14 +61,13 @@ export default async function DashboardPage() {
 				/>
 				<StatCard
 					title="Membros Ativos"
-					value={report.totalEmployees}
+					value={reports.totalEmployees}
 					icon={BarChart3}
 					color="text-orange-500"
 				/>
 			</div>
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-				{/* Tabela de Progresso (Report) */}
 				<div className="lg:col-span-2 bg-[#09090b] border border-white/5 rounded-3xl p-6">
 					<h2 className="text-lg font-semibold mb-6">
 						Progresso por Colaborador
@@ -85,7 +82,7 @@ export default async function DashboardPage() {
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-white/5">
-								{report.employees.map((emp: any) => (
+								{reports.employees.map((emp: any) => (
 									<tr key={emp.id} className="group">
 										<td className="py-4">
 											<div className="flex flex-col">
@@ -151,20 +148,6 @@ export default async function DashboardPage() {
 					</div>
 				</div>
 			</div>
-		</div>
-	)
-}
-
-function StatCard({ title, value, icon: Icon, color }: any) {
-	return (
-		<div className="bg-[#09090b] border border-white/5 p-6 rounded-3xl">
-			<div className="flex items-center justify-between mb-4">
-				<div className={`p-2 rounded-xl bg-white/5 ${color}`}>
-					<Icon size={20} />
-				</div>
-			</div>
-			<p className="text-sm text-zinc-500">{title}</p>
-			<h3 className="text-2xl font-bold text-zinc-100">{value}</h3>
 		</div>
 	)
 }

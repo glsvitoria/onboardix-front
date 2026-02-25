@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
-import Link from 'next/link'
 
 export function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -21,36 +20,36 @@ export function Header() {
 				</a>
 
 				<div className="hidden items-center gap-8 md:flex">
-					<button
+					<Button
 						onClick={() =>
 							document
 								.getElementById('problema')
 								?.scrollIntoView({ behavior: 'smooth' })
 						}
-						className="text-sm text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+						variant="lp-header"
 					>
 						Problema
-					</button>
-					<button
+					</Button>
+					<Button
 						onClick={() =>
 							document
 								.getElementById('funcionalidades')
 								?.scrollIntoView({ behavior: 'smooth' })
 						}
-						className="text-sm text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+						variant="lp-header"
 					>
 						Funcionalidades
-					</button>
-					<button
+					</Button>
+					<Button
 						onClick={() =>
 							document
 								.getElementById('precos')
 								?.scrollIntoView({ behavior: 'smooth' })
 						}
-						className="text-sm text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+						variant="lp-header"
 					>
 						{'Pre\u00e7os'}
-					</button>
+					</Button>
 				</div>
 
 				<div className="hidden md:block">
@@ -83,39 +82,39 @@ export function Header() {
 			{mobileMenuOpen && (
 				<div className="border-t border-border/50 bg-background/95 backdrop-blur-xl md:hidden">
 					<div className="flex flex-col gap-4 px-6 py-6">
-						<button
-							className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+						<Button
 							onClick={() => {
 								setMobileMenuOpen(false)
 								document
 									.getElementById('problema')
 									?.scrollIntoView({ behavior: 'smooth' })
 							}}
+							variant="lp-header"
 						>
 							Problema
-						</button>
-						<button
-							className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+						</Button>
+						<Button
 							onClick={() => {
 								setMobileMenuOpen(false)
 								document
 									.getElementById('precos')
 									?.scrollIntoView({ behavior: 'smooth' })
 							}}
+							variant="lp-header"
 						>
 							Funcionalidades
-						</button>
-						<button
-							className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+						</Button>
+						<Button
 							onClick={() => {
 								setMobileMenuOpen(false)
 								document
 									.getElementById('precos')
 									?.scrollIntoView({ behavior: 'smooth' })
 							}}
+							variant="lp-header"
 						>
 							{'Pre\u00e7os'}
-						</button>
+						</Button>
 						<Button size="lg" className="mt-2 w-full rounded-full">
 							Garantir Acesso Beta
 						</Button>

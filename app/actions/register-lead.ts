@@ -1,7 +1,9 @@
 'use server'
 
-import { ActionState } from '@/@types/action-state'
+import { handleApiError } from '@/lib/api/handle-error'
+import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
+import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 
 const registerLeadSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -26,34 +28,13 @@ export async function registerLeadAction(
 	}
 
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/leads/register`,
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email: validatedFields.data.email }),
-			}
-		)
-
-		const data = await response.json()
-
-		if (!response.ok) {
-			return {
-				errors: {
-					global: data.message || 'Erro ao realizar o cadastro do lead.',
-				},
-				inputs: rawInput,
-			}
-		}
+		await api.post('/leads/register', validatedFields.data)
 
 		return { success: true }
 	} catch (error) {
-		console.error('[RegisterLeadAction Error]', error)
-		return {
-			errors: {
-				global: 'Erro de conexão. Verifique sua internet e tente novamente.',
-			},
+		return handleApiError({
+			error,
 			inputs: rawInput,
-		}
+		})
 	}
 }

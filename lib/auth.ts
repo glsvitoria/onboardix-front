@@ -1,5 +1,5 @@
-import { AuthenticatedUser } from '@/@types/authenticated-user'
-import { UserWithOrganization } from '@/@types/user'
+import { AuthenticatedUser } from '@/types/authenticated-user'
+import { UserWithOrganization } from '@/types/user'
 import { ACCESS_TOKEN } from '@/common/token'
 import { cookies } from 'next/headers'
 
@@ -19,7 +19,7 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
 
 		if (!response.ok) return null
 
-		const user = (await response.json()) as UserWithOrganization
+		const user: UserWithOrganization = await response.json()
 
 		return {
 			user,

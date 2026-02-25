@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState } from 'react'
 import { loginAction } from '@/app/actions/login'
 import { Button } from '@/components/ui/button'
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react'
@@ -9,23 +9,6 @@ import { FormInput } from '@/components/ui/form-input'
 
 export default function LoginPage() {
 	const [state, formAction, isPending] = useActionState(loginAction, {})
-	const [localErrors, setLocalErrors] = useState<any>(null)
-
-	useEffect(() => {
-		if (state.errors) setLocalErrors(state.errors)
-		if (state.success) {
-			// Redirecionamento após o login
-			window.location.href = '/dashboard'
-		}
-	}, [state])
-
-	const clearFieldError = (field: string) => {
-		setLocalErrors((prev: any) => {
-			if (!prev) return null
-			const { [field]: _, ...rest } = prev
-			return rest
-		})
-	}
 
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
@@ -63,8 +46,7 @@ export default function LoginPage() {
 							icon={Mail}
 							placeholder="seu@email.com"
 							defaultValue={state.inputs?.email}
-							error={localErrors?.email}
-							clearError={() => clearFieldError('email')}
+							error={state.errors?.email}
 							disabled={isPending}
 						/>
 
@@ -75,8 +57,7 @@ export default function LoginPage() {
 								type="password"
 								icon={Lock}
 								placeholder="••••••"
-								error={localErrors?.password}
-								clearError={() => clearFieldError('password')}
+								error={state.errors?.password}
 								disabled={isPending}
 							/>
 							<div className="flex justify-end">

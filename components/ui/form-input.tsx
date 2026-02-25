@@ -9,14 +9,12 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string
 	icon: LucideIcon
 	error?: string[] // Erros vindos da sua ActionState
-	clearError: () => void // Função para limpar o erro no estado local
 }
 
 export function FormInput({
 	label,
 	icon: Icon,
 	error,
-	clearError,
 	type,
 	...props
 }: FormInputProps) {
@@ -39,7 +37,6 @@ export function FormInput({
 					{...props}
 					type={inputType}
 					onChange={(e) => {
-						clearError() // Limpa o erro assim que o usuário digita
 						props.onChange?.(e)
 					}}
 					className={`pl-10 rounded-xl transition-all ${

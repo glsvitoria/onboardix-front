@@ -1,13 +1,13 @@
 'use server'
 
-import { ActionState } from '@/@types/action-state'
-import { ACCESS_TOKEN } from '@/common/token'
-import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
+import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { handleApiError } from '@/lib/api/handle-error'
+import { revalidatePath } from 'next/cache'
 
 const createTemplateSchema = z.object({
-	title: z.string().min(1, 'O título da trilha é obrigatório'),
+	title: z.string().min(1, 'O título do roteiro é obrigatório'),
 	description: z.string().optional(),
 	tasks: z
 		.array(
@@ -23,49 +23,57 @@ type State = ActionState<typeof createTemplateSchema>
 
 export async function createTemplateAction(
 	_prevState: State | null,
-	data: any // Recebemos o objeto direto para lidar com o array de tasks mais facilmente
+	formData: FormData // 'data' aqui é o FormData enviado pelo form
 ): Promise<State> {
-	// Validamos os campos
-	const validatedFields = createTemplateSchema.safeParse(data)
+	const rawData = Object.fromEntries(formData.entries())
+
+	// 1. Reconstrução do array de tasks
+	const tasks: any[] = []
+	Object.keys(rawData).forEach((key) => {
+		const match = key.match(/tasks\[(\d+)\]\[(\w+)\]/)
+		if (match) {
+			const index = parseInt(match[1])
+			const field = match[2]
+			if (!tasks[index]) tasks[index] = {}
+			tasks[index][field] = rawData[key]
+		}
+	})
+
+	const payload = {
+		title: rawData.title as string,
+		description: rawData.description as string,
+		tasks: tasks.filter(Boolean),
+	}
+
+	// 2. Validação com mapeamento de caminhos detalhados
+	const validatedFields = createTemplateSchema.safeParse(payload)
 
 	if (!validatedFields.success) {
+		const fieldErrors: Record<string, string[]> = {}
+
+		validatedFields.error.issues.forEach((issue) => {
+			const path = issue.path.join('.')
+			fieldErrors[path] = [issue.message]
+		})
+
 		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-			inputs: data,
+			success: false,
+			errors: fieldErrors,
+			inputs: payload,
 		}
 	}
 
 	try {
-		const token = (await cookies()).get(ACCESS_TOKEN)?.value
+		await api.post('/templates', validatedFields.data)
 
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/templates`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify(validatedFields.data),
-			}
-		)
+		revalidatePath('/dashboard/roteiros')
 
-		const result = await response.json()
-
-		if (!response.ok) {
-			return {
-				errors: { global: result.message || 'Erro ao criar trilha.' },
-				inputs: data,
-			}
-		}
-
-		revalidatePath('/dashboard/templates')
 		return { success: true }
-	} catch (e) {
-		console.error('[CreateTemplateAction Error]', e)
-		return {
-			errors: { global: 'Falha na conexão com o servidor.' },
-			inputs: data,
-		}
+	} catch (error: any) {
+		// Certifique-se que o handleApiError suporte receber o objeto payload em 'inputs'
+		return handleApiError({
+			error,
+			inputs: payload,
+		})
 	}
 }

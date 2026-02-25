@@ -1,7 +1,9 @@
 'use server'
 
-import { ActionState } from '@/@types/action-state'
+import { handleApiError } from '@/lib/api/handle-error'
+import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
+import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 
 const registerOrgSchema = z
 	.object({
@@ -33,32 +35,13 @@ export async function registerOrgAction(
 	}
 
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/organizations/register`,
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(validatedFields.data),
-			}
-		)
-
-		const data = await response.json()
-
-		if (!response.ok) {
-			return {
-				errors: {
-					global: data.message || 'Erro ao criar conta.',
-				},
-				inputs: rawInput,
-			}
-		}
+		await api.post('/organizations/register', validatedFields.data)
 
 		return { success: true }
-	} catch (e) {
-		console.error('[RegisterOrgAction Error]', e)
-		return {
-			errors: { global: 'Falha na conexão com o servidor.' },
+	} catch (error: any) {
+		return handleApiError({
+			error,
 			inputs: rawInput,
-		}
+		})
 	}
 }

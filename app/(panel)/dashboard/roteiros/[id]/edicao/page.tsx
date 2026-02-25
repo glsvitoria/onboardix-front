@@ -1,6 +1,6 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { notFound } from 'next/navigation'
-import { EditTemplateForm } from './components/edit-template-form'
+import { EditTemplateForm } from '../../components/edit-template-form'
 
 export default async function EditTemplatePage({
 	params,

@@ -2,15 +2,11 @@ import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import {
-	ChevronLeft,
-	Calendar,
-	ListChecks,
-	Edit,
-} from 'lucide-react'
+import { ChevronLeft, Calendar, ListChecks, Edit } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import { notFound } from 'next/navigation'
+import { DeleteTemplateButton } from '../components/delete-template-button'
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -39,15 +35,19 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 					</Link>
 				</Button>
 
-				<Button
-					asChild
-					variant="outline"
-					className="border-white/10 hover:bg-white/5"
-				>
-					<Link href={`/dashboard/roteiros/${id}/edicao`}>
-						<Edit size={16} className="mr-2" /> Editar Roteiro
-					</Link>
-				</Button>
+				<div className="flex items-center gap-3">
+					<DeleteTemplateButton id={id} redirectTo="/dashboard/roteiros" />
+
+					<Button
+						asChild
+						variant="outline"
+						className="border-white/10 hover:bg-white/5"
+					>
+						<Link href={`/dashboard/roteiros/${id}/edicao`}>
+							<Edit size={16} className="mr-2" /> Editar Roteiro
+						</Link>
+					</Button>
+				</div>
 			</div>
 
 			{/* Hero Section */}

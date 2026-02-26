@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FileQuestion, ChevronLeft, Search, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { GlowEffect } from '@/components/glow-effect'
 
 export default function TemplateNotFound() {
 	return (
@@ -11,6 +12,7 @@ export default function TemplateNotFound() {
 					<FileQuestion size={48} className="text-zinc-500" />
 				</div>
 			</div>
+			<GlowEffect icon={FileQuestion} />
 
 			<h1 className="text-2xl font-bold text-white mb-2">
 				Roteiro não encontrado

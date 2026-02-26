@@ -24,8 +24,8 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 
 	return (
 		<div className="max-w-5xl mx-auto p-8">
-			<div className="flex items-center justify-between mb-8">
-				<BackButton to="/dashboard/roteiros">Voltar</BackButton>
+			<div className="flex items-center justify-between mb-4">
+				<BackButton to="/dashboard/roteiros">Voltar para Roteiros</BackButton>
 
 				<div className="flex items-center gap-3">
 					<DeleteTemplateButton id={id} redirectTo="/dashboard/roteiros" />

@@ -11,7 +11,6 @@ export default async function EmployeeProfilePage() {
 
 	return (
 		<div className="min-h-screen bg-black text-zinc-100">
-			{/* Header Simplificado */}
 			<nav className="border-b border-white/5 bg-zinc-950/50 backdrop-blur-md sticky top-0 z-50">
 				<div className="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
 					<Link

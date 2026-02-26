@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { notFound } from 'next/navigation'
+import { BackButton } from '@/components/back-button'
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -35,11 +36,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 
 	return (
 		<div className="p-8 max-w-5xl mx-auto space-y-8">
-			<Link href="/dashboard/colaboradores">
-				<Button variant="link" className="-ml-4 mb-4">
-					<ChevronLeft size={18} /> Voltar para Equipe
-				</Button>
-			</Link>
+			<BackButton to="/dashboard/colaboradores">Voltar para Equipe</BackButton>
 
 			<div
 				className={`flex flex-col md:flex-row md:items-end justify-between gap-6 bg-zinc-900/40 border ${

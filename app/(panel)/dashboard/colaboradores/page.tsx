@@ -1,10 +1,7 @@
-// src/app/dashboard/colaboradores/page.tsx
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import {
 	UserPlus,
-	Search,
 	Mail,
 	Clock,
 	ChevronRight,
@@ -12,44 +9,43 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { listEmployeesService } from '@/services/employees/list'
+import { listInvitationsService } from '@/services/invitations/list'
+import { Pagination } from '@/components/pagination'
+import { Invitation } from '@/types/invitation'
+import { HeaderPage } from '../_components/header'
 
-export default async function CollaboratorsPage() {
-	// Fazemos as chamadas para as duas rotas específicas em paralelo
-	const [employeesData, invitationsData] = await Promise.all([
-		api
-			.get<any>('/employees', {
-				params: {
-					init: 0,
-					limit: 10,
-				},
-			})
-			.catch(() => ({ employees: [], total: 0 })),
-		api
-			.get<any>('/invitations', {
-				params: {
-					init: 0,
-					limit: 10,
-				},
-			})
-			.catch(() => ({ invitations: [], total: 0 })),
+const ITEMS_PER_PAGE_EMPLOYEES = 6
+const ITEMS_PER_PAGE_INVITATIONS = 6
+
+export default async function CollaboratorsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ page?: string }>
+}) {
+	const params = await searchParams
+	const currentPage = Number(params.page) || 1
+
+	const [employees, invitations] = await Promise.all([
+		listEmployeesService({
+			init: currentPage - 1,
+			limit: ITEMS_PER_PAGE_EMPLOYEES,
+		}),
+		listInvitationsService({
+			init: currentPage - 1,
+			limit: ITEMS_PER_PAGE_INVITATIONS,
+		}),
 	])
 
-	const employees = employeesData.users || []
-	const invitations = invitationsData.invitations || []
 
 	return (
 		<div className="p-8 max-w-7xl mx-auto space-y-8">
-			{/* Header Identêntico ao anterior */}
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-				<div>
-					<h1 className="text-3xl font-bold text-white tracking-tight">
-						Colaboradores
-					</h1>
-					<p className="text-zinc-500 text-sm">
-						Gerencie seus colaboradores ativos e acompanhe os convites
-						pendentes.
-					</p>
-				</div>
+				<HeaderPage
+					title="Colaboradores"
+					description="Gerencie seus colaboradores ativos e acompanhe os convites
+						pendentes."
+				/>
 
 				<Button
 					asChild
@@ -68,20 +64,24 @@ export default async function CollaboratorsPage() {
 						value="active"
 						className="rounded-lg px-6 data-[state=active]:bg-zinc-800"
 					>
-						Colaboradores ({employees.length})
+						<Link href="?page=1" scroll={false}>
+							Colaboradores ({employees.total})
+						</Link>
 					</TabsTrigger>
 					<TabsTrigger
 						value="pending"
 						className="rounded-lg px-6 data-[state=active]:bg-zinc-800"
 					>
-						Convites Pendentes ({invitations.length})
+						<Link href="?page=1" scroll={false}>
+							Convites Pendentes ({invitations.total})
+						</Link>
 					</TabsTrigger>
 				</TabsList>
 
 				{/* --- LISTA DE COLABORADORES (ATIVOS) --- */}
 				<TabsContent value="active" className="space-y-6">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						{employees.map((employee) => {
+						{employees.items.map((employee) => {
 							const taskCount = employee.onboarding?.taskCount || 0
 							const hasStarted = employee.onboarding?.status !== 'NOT_STARTED'
 							const isPendingAssignment = taskCount === 0
@@ -110,8 +110,8 @@ export default async function CollaboratorsPage() {
 											</div>
 											<div>
 												<h3 className="font-bold text-zinc-100 leading-tight">
-													{employee.name.split(' ')[0]}{' '}
-													{employee.name.split(' ').slice(-1)}
+													{employee.fullName.split(' ')[0]}{' '}
+													{employee.fullName.split(' ').slice(-1)}
 												</h3>
 												<span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">
 													{employee.role}
@@ -190,12 +190,18 @@ export default async function CollaboratorsPage() {
 								</div>
 							)
 						})}
-						{employees.length === 0 && (
+						{employees.items.length === 0 && (
 							<div className="col-span-full py-20 text-center bg-zinc-900/10 border border-dashed border-white/5 rounded-3xl text-zinc-500">
 								Nenhum colaborador ativo encontrado.
 							</div>
 						)}
 					</div>
+
+					<Pagination
+						totalItems={employees.total}
+						itemsPerPage={ITEMS_PER_PAGE_EMPLOYEES}
+						currentPage={currentPage}
+					/>
 				</TabsContent>
 
 				{/* --- LISTA DE CONVITES (PENDENTES) --- */}
@@ -217,16 +223,18 @@ export default async function CollaboratorsPage() {
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-white/5">
-								{invitations.map((invite: any) => (
+								{invitations.items.map((invitation: Invitation) => (
 									<tr
-										key={invite.id}
+										key={invitation.id}
 										className="hover:bg-white/[0.02] transition-colors group"
 									>
 										<td className="px-6 py-4 text-sm font-medium text-zinc-200">
-											{invite.email}
+											{invitation.email}
 										</td>
 										<td className="px-6 py-4 text-sm text-zinc-400">
-											{new Date(invite.createdAt).toLocaleDateString('pt-BR')}
+											{new Date(invitation.createdAt).toLocaleDateString(
+												'pt-BR'
+											)}
 										</td>
 										<td className="px-6 py-4">
 											<Badge
@@ -234,7 +242,9 @@ export default async function CollaboratorsPage() {
 												className="bg-amber-500/10 text-amber-500 border-none gap-1.5 text-[10px]"
 											>
 												<Clock size={12} />
-												{new Date(invite.expiresAt).toLocaleDateString('pt-BR')}
+												{new Date(invitation.expiresAt).toLocaleDateString(
+													'pt-BR'
+												)}
 											</Badge>
 										</td>
 										{/* <td className="px-6 py-4 text-right">
@@ -251,12 +261,18 @@ export default async function CollaboratorsPage() {
 							</tbody>
 						</table>
 
-						{invitations.length === 0 && (
+						{invitations.items.length === 0 && (
 							<div className="p-20 text-center text-zinc-600">
 								Todos os convites foram aceitos ou não há convites pendentes.
 							</div>
 						)}
 					</div>
+
+					<Pagination
+						totalItems={invitations.total}
+						itemsPerPage={ITEMS_PER_PAGE_INVITATIONS}
+						currentPage={currentPage}
+					/>
 				</TabsContent>
 			</Tabs>
 		</div>

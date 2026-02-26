@@ -11,9 +11,9 @@ export interface User {
 }
 
 export enum UserRole {
-	ADMIN,
-	OWNER,
-	MEMBER,
+	ADMIN = 'ADMIN',
+	OWNER = 'OWNER',
+	MEMBER = 'MEMBER',
 }
 
 export interface UserWithOrganization extends User {

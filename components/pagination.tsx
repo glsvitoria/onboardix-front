@@ -1,56 +1,80 @@
-// src/app/dashboard/templates/_components/pagination.tsx
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 interface PaginationProps {
+	totalItems: number
+	itemsPerPage: number
 	currentPage: number
-	lastPage: number
-	total: number
 }
 
-export function Pagination({ currentPage, lastPage, total }: PaginationProps) {
+export function Pagination({
+	totalItems,
+	itemsPerPage,
+	currentPage,
+}: PaginationProps) {
 	const router = useRouter()
+	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
-	const handlePageChange = (newPage: number) => {
-		const params = new URLSearchParams(searchParams.toString())
-		params.set('page', newPage.toString())
-		router.push(`?${params.toString()}`)
+	const totalPages = Math.ceil(totalItems / itemsPerPage)
+
+	if (totalPages <= 1) return null
+
+	const createPageUrl = (pageNumber: number) => {
+		const params = new URLSearchParams(searchParams)
+		params.set('page', pageNumber.toString())
+		return `${pathname}?${params.toString()}`
 	}
 
-	if (total === 0) return null
+	const handlePageChange = (page: number) => {
+		router.push(createPageUrl(page))
+	}
 
 	return (
-		<div className="flex items-center justify-between border-t border-white/5 pt-6">
+		<div className="flex items-center justify-between px-2 py-4 border-t border-white/5 mt-4">
 			<div className="text-sm text-zinc-500">
-				Mostrando página{' '}
-				<span className="text-zinc-200 font-medium">{currentPage}</span> de{' '}
-				<span className="text-zinc-200 font-medium">{lastPage}</span>
-				<span className="ml-2 text-zinc-700">({total} registros no total)</span>
+				Mostrando{' '}
+				<span className="font-medium text-zinc-300">
+					{(currentPage - 1) * itemsPerPage + 1}
+				</span>{' '}
+				a{' '}
+				<span className="font-medium text-zinc-300">
+					{Math.min(currentPage * itemsPerPage, totalItems)}
+				</span>{' '}
+				de <span className="font-medium text-zinc-300">{totalItems}</span>{' '}
+				resultados
 			</div>
 
-			<div className="flex gap-2">
+			<div className="flex items-center gap-2">
 				<Button
 					variant="outline"
 					size="sm"
 					disabled={currentPage <= 1}
 					onClick={() => handlePageChange(currentPage - 1)}
-					className="rounded-xl border-white/10 hover:bg-white/5 text-zinc-300"
+					className="bg-zinc-900/50 border-white/5 hover:bg-zinc-800 text-zinc-400"
 				>
-					<ChevronLeft size={18} className="mr-1" /> Anterior
+					<ChevronLeft size={16} className="mr-1" /> Anterior
 				</Button>
+
+				<div className="flex items-center gap-1 px-2">
+					<span className="text-sm font-medium text-zinc-200">
+						{currentPage}
+					</span>
+					<span className="text-sm text-zinc-500">/</span>
+					<span className="text-sm text-zinc-500">{totalPages}</span>
+				</div>
 
 				<Button
 					variant="outline"
 					size="sm"
-					disabled={currentPage >= lastPage}
+					disabled={currentPage >= totalPages}
 					onClick={() => handlePageChange(currentPage + 1)}
-					className="rounded-xl border-white/10 hover:bg-white/5 text-zinc-300"
+					className="bg-zinc-900/50 border-white/5 hover:bg-zinc-800 text-zinc-400"
 				>
-					Próximo <ChevronRight size={18} className="ml-1" />
+					Próximo <ChevronRight size={16} className="ml-1" />
 				</Button>
 			</div>
 		</div>

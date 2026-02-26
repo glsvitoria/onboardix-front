@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Pagination } from '@/components/pagination'
 import { DeleteTemplateButton } from './components/delete-template-button'
+import { HeaderPage } from '../_components/header'
 
 const ITEMS_PER_PAGE = 9
 
@@ -26,19 +27,13 @@ export default async function TemplatesPage({
 		},
 	})
 
-	const lastPage = Math.ceil(total / ITEMS_PER_PAGE)
-
 	return (
 		<div className="p-8 max-w-7xl mx-auto space-y-8">
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-				<div>
-					<h1 className="text-3xl font-bold tracking-tight text-white">
-						Roteiros
-					</h1>
-					<p className="text-zinc-500">
-						Gerencie as trilhas de aprendizado da sua organização.
-					</p>
-				</div>
+				<HeaderPage
+					title="Roteiros"
+					description="Gerencie as trilhas de aprendizado da sua organização."
+				/>
 
 				<Button
 					asChild
@@ -92,9 +87,9 @@ export default async function TemplatesPage({
 					</div>
 
 					<Pagination
+						itemsPerPage={ITEMS_PER_PAGE}
 						currentPage={currentPage}
-						lastPage={lastPage}
-						total={total}
+						totalItems={total}
 					/>
 				</>
 			) : (

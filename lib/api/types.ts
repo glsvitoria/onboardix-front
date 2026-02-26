@@ -1,8 +1,9 @@
-// src/lib/api/types.ts
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
 	params?: Record<string, string | number>
 	body?: any
 }
+
+export interface RequestOptionsService extends Omit<RequestOptions, 'params'> {}
 
 export interface ApiError {
 	message: string

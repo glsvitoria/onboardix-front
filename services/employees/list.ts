@@ -1,5 +1,7 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { RequestOptionsService } from '@/lib/api/types'
 import { Employee } from '@/types/employee'
+import { ServiceError } from '@/types/service-error'
 
 interface ListEmployeesResponse {
 	users: Employee[]
@@ -14,6 +16,7 @@ interface ListEmployeesReturn {
 interface ListEmployeesProps {
 	init: number
 	limit: number
+	options?: RequestOptionsService
 }
 
 export async function listEmployeesService(
@@ -28,13 +31,18 @@ export async function listEmployeesService(
 					init: init * limit,
 					limit,
 				},
+				...props.options,
 			}
 		)
+
 		return {
 			items: users,
 			total,
 		}
-	} catch (error) {
-		return { items: [], total: 0 }
+	} catch (error: any) {
+		throw new ServiceError(
+			error?.response?.data?.message || error?.message,
+			error?.response?.status || 500
+		)
 	}
 }

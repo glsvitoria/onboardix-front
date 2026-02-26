@@ -1,4 +1,5 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { RequestOptionsService } from '@/lib/api/types'
 import { Invitation } from '@/types/invitation'
 
 interface ListInvitationsResponse {
@@ -14,6 +15,7 @@ interface ListInvitationsReturn {
 interface ListInvitationsProps {
 	init: number
 	limit: number
+	options?: RequestOptionsService
 }
 
 export async function listInvitationsService(
@@ -28,6 +30,7 @@ export async function listInvitationsService(
 					init: init * limit,
 					limit,
 				},
+				...props.options,
 			}
 		)
 

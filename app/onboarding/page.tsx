@@ -1,10 +1,8 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
-import { Rocket, BookOpen, LogOut } from 'lucide-react'
+import { Rocket, BookOpen } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { TaskItem } from './_components/task-item'
-import Link from 'next/link'
 import { getSession } from '@/lib/auth'
 import { LogoutButton } from '@/components/logout-button'
 

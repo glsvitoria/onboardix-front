@@ -35,14 +35,11 @@ export default async function TemplatesPage({
 					description="Gerencie as trilhas de aprendizado da sua organização."
 				/>
 
-				<Button
-					asChild
-					className="bg-primary hover:bg-primary/90 text-black font-bold rounded-xl gap-2"
-				>
-					<Link href="/dashboard/roteiros/novo">
+				<Link href="/dashboard/roteiros/novo">
+					<Button className="w-40">
 						<Plus size={20} /> Novo Roteiro
-					</Link>
-				</Button>
+					</Button>
+				</Link>
 			</div>
 
 			{templates.length > 0 ? (

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { UserX, ChevronLeft, Search } from 'lucide-react'
+import { UserX, ChevronLeft, Search, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function EmployeeNotFound() {
@@ -22,24 +22,20 @@ export default function EmployeeNotFound() {
 				sido removido da organização ou o ID fornecido é inválido.
 			</p>
 
-			<div className="flex flex-col sm:flex-row gap-3">
-				<Button
-					asChild
-					variant="outline"
-					className="border-white/5 bg-white/5 hover:bg-white/10 text-zinc-300 rounded-xl"
-				>
-					<Link href="/dashboard/colaboradores">
-						<ChevronLeft size={18} className="mr-2" />
+			<div className="flex flex-col sm:grid sm:grid-cols-2 gap-3">
+				<Link href="/dashboard/colaboradores">
+					<Button variant="outline" className="rounded-full w-full">
+						<ChevronLeft size={18} />
 						Voltar para a Equipe
-					</Link>
-				</Button>
+					</Button>
+				</Link>
 
-				<Button
-					asChild
-					className="bg-primary text-black font-bold hover:bg-primary/90 rounded-xl px-8"
-				>
-					<Link href="/dashboard/colaboradores/convidar">Convidar novo</Link>
-				</Button>
+				<Link href="/dashboard/colaboradores/convidar">
+					<Button className="font-bold rounded-full w-full">
+						<UserPlus size={18} />
+						Convidar novo
+					</Button>
+				</Link>
 			</div>
 
 			{/* Dica visual */}

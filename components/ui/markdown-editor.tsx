@@ -30,17 +30,17 @@ export function MarkdownEditor({
 			>
 				{/* Coluna de Escrita */}
 				<div className="bg-[#09090b] p-2">
-					<div className="flex items-center justify-between px-3 py-1 mb-2 border-b border-white/5">
+					<div className="flex items-center justify-between px-3 pt-1 pb-3 mb-2 border-b border-zinc-800">
 						<span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
 							Editor
 						</span>
 
 						<Button
 							type="button"
-							variant="ghost"
+							variant="outline"
 							size="sm"
 							onClick={() => setShowPreview(!showPreview)}
-							className="h-6 px-2 text-[10px] uppercase font-bold text-zinc-400 hover:text-primary transition-colors gap-1.5"
+							className="h-6 px-2 text-[10px] uppercase font-bold text-zinc-400 gap-1.5"
 						>
 							{showPreview ? (
 								<>
@@ -67,7 +67,7 @@ export function MarkdownEditor({
 				{/* Coluna de Visualização (Condicional) */}
 				{showPreview && (
 					<div className="bg-zinc-900/20 p-2 animate-in fade-in slide-in-from-right-2 duration-300">
-						<div className="flex items-center gap-2 px-3 py-1 mb-2 border-b border-white/5 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+						<div className="flex items-center gap-2 px-3 py-1 mb-2 border-b border-zinc-800 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
 							Preview
 						</div>
 						<div className="min-h-[200px] p-3 prose prose-invert max-w-none break-words">

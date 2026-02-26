@@ -4,7 +4,7 @@ import { useActionState, useState, useEffect } from 'react'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { FormInput } from '@/components/ui/form-input'
 import { Button } from '@/components/ui/button'
-import { Loader2, Type } from 'lucide-react'
+import { Type } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { updateTemplateAction } from '@/app/actions/update-template'
 
@@ -49,7 +49,6 @@ export function EditTemplateForm({
 
 	return (
 		<form action={formAction} className="space-y-8">
-			{/* Campos de Título e Descrição com defaultValue={initialData.title} */}
 			<FormInput
 				label="Título"
 				name="title"
@@ -58,7 +57,6 @@ export function EditTemplateForm({
 				icon={Type}
 			/>
 
-			{/* Loop de Tasks similar ao da criação */}
 			{tasks.map((task: any, index: number) => (
 				<div
 					key={index}
@@ -79,7 +77,7 @@ export function EditTemplateForm({
 						placeholder="Use # para títulos, ** para negrito, [link](url) para links..."
 						error={getTaskError(index, 'content')}
 					/>
-					{/* Campo hidden para o FormData pegar o conteúdo do Markdown */}
+
 					<input
 						type="hidden"
 						name={`tasks[${index}][content]`}
@@ -91,14 +89,10 @@ export function EditTemplateForm({
 			<div className="flex gap-4">
 				<Button
 					type="submit"
-					disabled={isPending}
+					isLoading={isPending}
 					className="flex-1 bg-primary text-black font-bold"
 				>
-					{isPending ? (
-						<Loader2 className="animate-spin" />
-					) : (
-						'Salvar Alterações'
-					)}
+					Salvar Alterações
 				</Button>
 			</div>
 		</form>

@@ -40,16 +40,11 @@ export default async function AssignTemplatePage({
 
 	return (
 		<div className="p-8 max-w-4xl mx-auto space-y-8">
-			{/* Botão Voltar */}
-			<Button
-				asChild
-				variant="ghost"
-				className="text-zinc-500 hover:text-white -ml-4"
-			>
-				<Link href={`/dashboard/colaboradores/${id}`}>
+			<Link href={`/dashboard/colaboradores/${id}`}>
+				<Button variant="link" className="-ml-4 mb-4">
 					<ChevronLeft size={20} className="mr-1" /> Voltar ao perfil
-				</Link>
-			</Button>
+				</Button>
+			</Link>
 
 			<div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
 				<div className="space-y-2">

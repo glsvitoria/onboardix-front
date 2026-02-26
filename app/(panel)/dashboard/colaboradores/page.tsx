@@ -37,7 +37,6 @@ export default async function CollaboratorsPage({
 		}),
 	])
 
-
 	return (
 		<div className="p-8 max-w-7xl mx-auto space-y-8">
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -47,15 +46,12 @@ export default async function CollaboratorsPage({
 						pendentes."
 				/>
 
-				<Button
-					asChild
-					className="bg-primary text-black font-bold hover:bg-primary/90"
-				>
-					<Link href="/dashboard/colaboradores/convidar">
-						<UserPlus size={18} className="mr-2" />
+				<Link href="/dashboard/colaboradores/convidar">
+					<Button className="w-40">
+						<UserPlus size={18} />
 						Novo Convite
-					</Link>
-				</Button>
+					</Button>
+				</Link>
 			</div>
 
 			<Tabs defaultValue="active" className="space-y-6">

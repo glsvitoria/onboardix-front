@@ -1,6 +1,5 @@
-// src/app/dashboard/templates/[id]/not-found.tsx
 import Link from 'next/link'
-import { FileQuestion, ChevronLeft, Search } from 'lucide-react'
+import { FileQuestion, ChevronLeft, Search, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function TemplateNotFound() {
@@ -22,24 +21,20 @@ export default function TemplateNotFound() {
 				removido ou o link está incorreto.
 			</p>
 
-			<div className="flex flex-col sm:flex-row gap-3">
-				<Button
-					asChild
-					variant="outline"
-					className="border-white/5 bg-white/5 hover:bg-white/10 text-zinc-300"
-				>
-					<Link href="/dashboard/roteiros">
-						<ChevronLeft size={18} className="mr-2" />
+			<div className="flex flex-col sm:grid sm:grid-cols-2 gap-3">
+				<Link href="/dashboard/roteiros">
+					<Button variant="outline" className="rounded-full w-full">
+						<ChevronLeft size={18} />
 						Voltar para a lista
-					</Link>
-				</Button>
+					</Button>
+				</Link>
 
-				<Button
-					asChild
-					className="bg-primary text-black font-bold hover:bg-primary/90"
-				>
-					<Link href="/dashboard/roteiros/novo">Criar novo roteiro</Link>
-				</Button>
+				<Link href="/dashboard/roteiros/novo">
+					<Button className="font-bold rounded-full w-full">
+						<Plus size={18} />
+						Criar novo roteiro
+					</Button>
+				</Link>
 			</div>
 
 			{/* Dica visual de ID inválido */}

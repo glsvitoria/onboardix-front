@@ -7,6 +7,7 @@ import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import { notFound } from 'next/navigation'
 import { DeleteTemplateButton } from '../components/delete-template-button'
+import { BackButton } from '@/components/back-button'
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -23,30 +24,17 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 
 	return (
 		<div className="max-w-5xl mx-auto p-8">
-			{/* Header de Navegação */}
 			<div className="flex items-center justify-between mb-8">
-				<Button
-					variant="ghost"
-					asChild
-					className="text-zinc-400 hover:text-white -ml-4"
-				>
-					<Link href="/dashboard/roteiros">
-						<ChevronLeft size={20} className="mr-1" /> Voltar
-					</Link>
-				</Button>
+				<BackButton to="/dashboard/roteiros">Voltar</BackButton>
 
 				<div className="flex items-center gap-3">
 					<DeleteTemplateButton id={id} redirectTo="/dashboard/roteiros" />
 
-					<Button
-						asChild
-						variant="outline"
-						className="border-white/10 hover:bg-white/5"
-					>
-						<Link href={`/dashboard/roteiros/${id}/edicao`}>
+					<Link href={`/dashboard/roteiros/${id}/edicao`}>
+						<Button variant="outline">
 							<Edit size={16} className="mr-2" /> Editar Roteiro
-						</Link>
-					</Button>
+						</Button>
+					</Link>
 				</div>
 			</div>
 

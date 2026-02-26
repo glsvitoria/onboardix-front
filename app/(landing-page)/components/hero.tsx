@@ -60,18 +60,12 @@ export function Hero() {
 									/>
 									<Button
 										type="submit"
-										size="lg"
-										disabled={isPending}
-										className="h-12 rounded-full px-6 transition-all active:scale-95"
+										size="xl"
+										isLoading={isPending}
+										className="rounded-full"
 									>
-										{isPending ? (
-											<Loader2 className="size-4 animate-spin" />
-										) : (
-											<>
-												Entrar na Lista
-												<ArrowRight className="ml-1 size-4" />
-											</>
-										)}
+										Entrar na Lista
+										<ArrowRight className="ml-1 size-4" />
 									</Button>
 								</div>
 

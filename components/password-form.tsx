@@ -4,6 +4,7 @@ import { updatePasswordAction } from '@/app/actions/update-password'
 import { FormInput } from '@/components/ui/form-input'
 import { Lock } from 'lucide-react'
 import { useActionState } from 'react'
+import { Button } from './ui/button'
 
 export function PasswordForm() {
 	const [state, formAction, isPending] = useActionState(
@@ -46,12 +47,9 @@ export function PasswordForm() {
 				</div>
 			)}
 
-			<button
-				disabled={isPending}
-				className="h-11 px-8 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:opacity-90 transition-all disabled:opacity-50"
-			>
-				{isPending ? 'Atualizando...' : 'Atualizar senha'}
-			</button>
+			<Button size="xl" isLoading={isPending} type="submit">
+				Atualizar senha
+			</Button>
 		</form>
 	)
 }

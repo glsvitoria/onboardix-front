@@ -14,7 +14,6 @@ export function AssignButton({
 	employeeId: string
 	templateId: string
 }) {
-	// O bind aqui prepara os argumentos fixos da função
 	const actionWithIds = assignTemplateAction.bind(null, employeeId, templateId)
 
 	const [state, formAction, isPending] = useActionState(actionWithIds, null)
@@ -29,17 +28,11 @@ export function AssignButton({
 		<form action={formAction}>
 			<Button
 				type="submit"
-				disabled={isPending}
+				isLoading={isPending}
 				className="bg-white text-black font-bold hover:bg-zinc-200 rounded-xl gap-2"
 			>
-				{isPending ? (
-					<Loader2 className="animate-spin" size={16} />
-				) : (
-					<>
-						Atribuir este
-						<ArrowRight size={16} />
-					</>
-				)}
+				Atribuir este
+				<ArrowRight size={16} />
 			</Button>
 		</form>
 	)

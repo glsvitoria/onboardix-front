@@ -35,18 +35,12 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 
 	return (
 		<div className="p-8 max-w-5xl mx-auto space-y-8">
-			{/* Botão Voltar */}
-			<Button
-				asChild
-				variant="ghost"
-				className="text-zinc-500 hover:text-white -ml-4"
-			>
-				<Link href="/dashboard/colaboradores">
-					<ChevronLeft size={20} className="mr-1" /> Voltar para Equipe
-				</Link>
-			</Button>
+			<Link href="/dashboard/colaboradores">
+				<Button variant="link" className="-ml-4 mb-4">
+					<ChevronLeft size={18} /> Voltar para Equipe
+				</Button>
+			</Link>
 
-			{/* Header do Perfil */}
 			<div
 				className={`flex flex-col md:flex-row md:items-end justify-between gap-6 bg-zinc-900/40 border ${
 					!hasTasks ? 'border-amber-500/20' : 'border-white/5'
@@ -84,15 +78,12 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 							{employee.progress}% Concluído
 						</Badge>
 					) : (
-						<Button
-							asChild
-							className="bg-amber-500 text-black font-bold hover:bg-amber-400"
-						>
-							<Link href={`/dashboard/colaboradores/${id}/atribuir`}>
+						<Link href={`/dashboard/colaboradores/${id}/atribuir`}>
+							<Button className="bg-amber-500 text-black font-bold hover:bg-amber-400">
 								<PlusCircle size={18} className="mr-2" />
 								Atribuir Roteiro
-							</Link>
-						</Button>
+							</Button>
+						</Link>
 					)}
 				</div>
 			</div>

@@ -32,9 +32,11 @@ export default function RegisterOrgPage() {
 							<p className="mt-2 text-muted-foreground">
 								Sua organização foi criada. Você já pode acessar o dashboard.
 							</p>
-							<Button asChild className="mt-8 w-full rounded-full">
-								<Link href="/auth">Ir para Login</Link>
-							</Button>
+							<Link href="/auth">
+								<Button className="mt-8 w-full rounded-full">
+									Ir para Login
+								</Button>
+							</Link>
 						</div>
 					) : (
 						<>

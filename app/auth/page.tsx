@@ -1,24 +1,14 @@
-'use client'
-
-import { useActionState } from 'react'
-import { loginAction } from '@/app/actions/login'
-import { Button } from '@/components/ui/button'
-import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { FormInput } from '@/components/ui/form-input'
+import { FormLogin } from './form'
 
 export default function LoginPage() {
-	const [state, formAction, isPending] = useActionState(loginAction, {})
-
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
-			{/* Background Glows Estilo Onboardix */}
 			<div className="pointer-events-none absolute inset-0 overflow-hidden">
 				<div className="absolute top-1/2 left-1/2 size-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
 			</div>
 
 			<div className="relative z-10 w-full max-w-[400px]">
-				{/* Logo superior sutil */}
 				<div className="mb-8 text-center">
 					<Link
 						href="/"
@@ -38,69 +28,7 @@ export default function LoginPage() {
 						</p>
 					</div>
 
-					<form action={formAction} className="space-y-4">
-						<FormInput
-							label="E-mail"
-							name="email"
-							type="email"
-							icon={Mail}
-							placeholder="seu@email.com"
-							defaultValue={state.inputs?.email}
-							error={state.errors?.email}
-							disabled={isPending}
-						/>
-
-						<div className="space-y-1">
-							<FormInput
-								label="Senha"
-								name="password"
-								type="password"
-								icon={Lock}
-								placeholder="••••••"
-								error={state.errors?.password}
-								disabled={isPending}
-							/>
-							<div className="flex justify-end">
-								<Link
-									href="/forgot-password"
-									className="text-[11px] text-primary hover:underline font-medium"
-								>
-									Esqueceu a senha?
-								</Link>
-							</div>
-						</div>
-
-						{state.errors?.global && (
-							<div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs text-center font-medium animate-in shake-1">
-								{state.errors.global}
-							</div>
-						)}
-
-						<Button
-							type="submit"
-							disabled={isPending}
-							className="w-full rounded-full h-11 mt-2 font-semibold group"
-						>
-							{isPending ? (
-								<Loader2 className="size-4 animate-spin" />
-							) : (
-								<>
-									Entrar na plataforma
-									<ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
-								</>
-							)}
-						</Button>
-
-						<div className="mt-6 text-center text-xs text-muted-foreground">
-							Não tem uma organização?{' '}
-							<Link
-								href="/register"
-								className="text-primary font-semibold hover:underline"
-							>
-								Crie agora gratuitamente
-							</Link>
-						</div>
-					</form>
+					<FormLogin />
 				</div>
 			</div>
 		</main>

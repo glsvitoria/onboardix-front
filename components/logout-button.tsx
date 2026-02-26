@@ -61,8 +61,8 @@ export function LogoutButton({
 				<DialogFooter className="flex flex-row gap-3 mt-4">
 					<DialogClose asChild>
 						<Button
-							variant="secondary"
-							className="flex-1 bg-white/5 text-zinc-300 hover:bg-white/10 border-none rounded-xl"
+							variant="outline"
+							className="flex-1 rounded-xl"
 						>
 							Cancelar
 						</Button>
@@ -71,7 +71,7 @@ export function LogoutButton({
 					<Button
 						onClick={async () => await logoutAction()}
 						variant="destructive"
-						className="flex-1 rounded-xl font-bold"
+						className="flex-1 rounded-xl"
 					>
 						Confirmar
 					</Button>

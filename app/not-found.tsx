@@ -28,12 +28,12 @@ export default function NotFound() {
 				</p>
 
 				<div className="mt-10 flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
-					<Button asChild size="lg" className="h-12 rounded-full px-8">
-						<Link href="/">
+					<Link href="/">
+						<Button size="xl" className="rounded-full">
 							<Home className="mr-2 size-4" />
 							Voltar ao Início
-						</Link>
-					</Button>
+						</Button>
+					</Link>
 				</div>
 			</div>
 

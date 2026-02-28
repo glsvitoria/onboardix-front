@@ -1,12 +1,14 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { deleteTemplatesService } from '@/services/templates/delete'
 
 export async function deleteTemplateAction(id: string) {
 	try {
-		await api.delete(`/templates/${id}`)
+		await deleteTemplatesService({
+			templateId: id,
+		})
 
 		revalidatePath('/dashboard/templates')
 

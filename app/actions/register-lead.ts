@@ -3,7 +3,8 @@
 import { handleApiError } from '@/lib/api/handle-error'
 import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
+import { formatZodErrors } from '@/lib/format-zod-errors'
+import { createLeadsService } from '@/services/leads/create'
 
 const registerLeadSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -20,15 +21,16 @@ export async function registerLeadAction(
 
 	if (!validatedFields.success) {
 		return {
-			errors: {
-				global: validatedFields.error.flatten().fieldErrors.email?.[0],
-			},
+			errors: formatZodErrors(validatedFields),
 			inputs: rawInput,
+			success: false,
 		}
 	}
 
 	try {
-		await api.post('/leads/register', validatedFields.data)
+		await createLeadsService({
+			body: validatedFields.data,
+		})
 
 		return { success: true }
 	} catch (error) {

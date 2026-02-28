@@ -2,6 +2,8 @@
 
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { formatZodErrors } from '@/lib/format-zod-errors'
+import { updatePasswordUsersService } from '@/services/users/update-password'
 import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
 
@@ -28,17 +30,20 @@ export async function updatePasswordAction(
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
-	const validated = updatePasswordSchema.safeParse(rawData)
+	const validatedFields = updatePasswordSchema.safeParse(rawData)
 
-
-	if (!validated.success) {
+	if (!validatedFields.success) {
 		return {
-			errors: validated.error.flatten().fieldErrors,
+			errors: formatZodErrors(validatedFields),
+			inputs: rawData,
+			success: false,
 		}
 	}
 
 	try {
-		await api.patch('/users/profile/password', validated.data)
+		await updatePasswordUsersService({
+			body: validatedFields.data,
+		})
 
 		return {
 			success: true,

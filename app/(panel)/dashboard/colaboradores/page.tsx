@@ -82,7 +82,6 @@ export default async function CollaboratorsPage({
 					</TabsTrigger>
 				</TabsList>
 
-				{/* --- LISTA DE COLABORADORES (ATIVOS) --- */}
 				<TabsContent value="active" className="space-y-6">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{isEmployeesError ? (
@@ -236,7 +235,7 @@ export default async function CollaboratorsPage({
 									{invitations.items.map((invitation: Invitation) => (
 										<tr
 											key={invitation.id}
-											className="hover:bg-white/[0.02] transition-colors group"
+											className="transition-colors group"
 										>
 											<td className="px-6 py-4 text-sm font-medium text-zinc-200">
 												{invitation.email}

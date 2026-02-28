@@ -37,7 +37,6 @@ export function DashboardMockup() {
 								'Colaboradores',
 								'Trilhas',
 								'Documentos',
-								'Configurações',
 							].map((item, i) => (
 								<div
 									key={item}

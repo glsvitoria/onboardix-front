@@ -12,3 +12,9 @@ export interface Template {
 export interface TemplateWithTasks extends Template {
 	tasks: Task[]
 }
+
+export interface TemplateWithTasksCount extends Template {
+	_count: {
+		tasks: number
+	}
+}

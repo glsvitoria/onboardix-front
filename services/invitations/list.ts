@@ -13,24 +13,23 @@ interface ListInvitationsReturn {
 }
 
 interface ListInvitationsProps {
-	init: number
-	limit: number
+	params: {
+		init: number
+		limit: number
+	}
 	options?: RequestOptionsService
 }
 
 export async function listInvitationsService(
 	props: ListInvitationsProps
 ): Promise<ListInvitationsReturn> {
-	const { init, limit } = props
+	const { params, options } = props
 	try {
 		const { invitations, total } = await api.get<ListInvitationsResponse>(
 			'/invitations',
 			{
-				params: {
-					init: init * limit,
-					limit,
-				},
-				...props.options,
+				params,
+				...options,
 			}
 		)
 

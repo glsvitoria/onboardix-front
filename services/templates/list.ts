@@ -1,31 +1,31 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { RequestOptionsService } from '@/lib/api/types'
-import { Employee } from '@/types/employee'
 import { ServiceError } from '@/types/service-error'
+import { TemplateWithTasksCount } from '@/types/template'
 
-interface ListEmployeesResponse {
-	users: Employee[]
+interface ListTemplatesResponse {
+	templates: TemplateWithTasksCount[]
 	total: number
 }
 
-interface ListEmployeesReturn {
-	items: Employee[]
+interface ListTemplatesReturn {
+	items: TemplateWithTasksCount[]
 	total: number
 }
 
-interface ListEmployeesProps {
+interface ListTemplatesProps {
 	init: number
 	limit: number
 	options?: RequestOptionsService
 }
 
-export async function listEmployeesService(
-	props: ListEmployeesProps
-): Promise<ListEmployeesReturn> {
+export async function listTemplatesService(
+	props: ListTemplatesProps
+): Promise<ListTemplatesReturn> {
 	const { init, limit, options } = props
 	try {
-		const { total, users } = await api.get<ListEmployeesResponse>(
-			'/employees',
+		const { total, templates } = await api.get<ListTemplatesResponse>(
+			'/templates',
 			{
 				params: {
 					init: init * limit,
@@ -36,10 +36,11 @@ export async function listEmployeesService(
 		)
 
 		return {
-			items: users,
+			items: templates,
 			total,
 		}
 	} catch (error: any) {
+		console.log(error)
 		throw new ServiceError(
 			error?.response?.data?.message || error?.message,
 			error?.response?.status || 500

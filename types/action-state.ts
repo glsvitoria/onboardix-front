@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export interface ActionState<T extends z.ZodType<any, any, any>> {
-	success?: boolean
+	success: boolean
 	errors?: z.inferFlattenedErrors<T>['fieldErrors'] & {
 		global?: string
 	}

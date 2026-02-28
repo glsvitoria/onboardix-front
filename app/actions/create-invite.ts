@@ -2,11 +2,11 @@
 
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { formatZodErrors } from '@/lib/format-zod-errors'
 import { ActionState } from '@/types/action-state'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-// Schema para validação rápida no client-side antes de enviar para a API
 const inviteSchema = z.object({
 	email: z
 		.string()
@@ -28,20 +28,12 @@ export async function createInviteAction(
 	const validatedFields = inviteSchema.safeParse(rawData)
 
 	if (!validatedFields.success) {
-		const fieldErrors: Record<string, string[]> = {}
-
-		validatedFields.error.issues.forEach((issue) => {
-			const path = issue.path.join('.')
-			fieldErrors[path] = [issue.message]
-		})
-
 		return {
 			success: false,
-			errors: fieldErrors,
+			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
 		}
 	}
-
 
 	try {
 		await api.post('/invitations', validatedFields.data)
@@ -49,7 +41,7 @@ export async function createInviteAction(
 		revalidatePath('/dashboard/colaboradores')
 		return { success: true }
 	} catch (error: any) {
-    console.log(error)
+		console.log(error)
 		return handleApiError({
 			error,
 			inputs: rawData,

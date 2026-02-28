@@ -1,7 +1,8 @@
 'use server'
 
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { formatZodErrors } from '@/lib/format-zod-errors'
+import { updateProfileUsersService } from '@/services/users/update-profile'
 import { ActionState } from '@/types/action-state'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -19,17 +20,20 @@ export async function updateProfileAction(
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
-	const validated = updateProfileSchema.safeParse(rawData)
+	const validatedFields = updateProfileSchema.safeParse(rawData)
 
-	if (!validated.success) {
+	if (!validatedFields.success) {
 		return {
-			errors: validated.error.flatten().fieldErrors,
+			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			success: false,
 		}
 	}
 
 	try {
-		await api.patch('/users/profile', validated.data)
+		await updateProfileUsersService({
+			body: validatedFields.data,
+		})
 
 		revalidatePath('/dashboard/perfil')
 

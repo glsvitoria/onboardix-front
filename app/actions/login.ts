@@ -5,8 +5,8 @@ import { ACCESS_TOKEN } from '@/common/token'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { loginAuthService } from '@/services/auth/login'
 
 const loginSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -30,10 +30,9 @@ export async function loginAction(
 	}
 
 	try {
-		const { access_token } = await api.post<{ access_token: string }>(
-			'/auth/login',
-			validatedFields.data
-		)
+		const { access_token } = await loginAuthService({
+			body: validatedFields.data,
+		})
 
 		const cookieStore = await cookies()
 

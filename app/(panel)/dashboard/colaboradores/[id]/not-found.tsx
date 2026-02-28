@@ -1,43 +1,29 @@
-import Link from 'next/link'
-import { UserX, ChevronLeft, Search, UserPlus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { GlowEffect } from '@/components/glow-effect'
+import { ChevronLeft, UserPlus, UserX } from 'lucide-react'
+import { NotFound } from '@/components/not-found'
 
 export default function EmployeeNotFound() {
 	return (
-		<div className="h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center px-4">
-			<GlowEffect icon={UserX} />
-
-			<h1 className="text-2xl font-bold text-white mb-2">
-				Colaborador não encontrado
-			</h1>
-
-			<p className="text-zinc-500 max-w-[400px] mb-8">
-				Não conseguimos localizar o perfil solicitado. O colaborador pode ter
-				sido removido da organização ou o ID fornecido é inválido.
-			</p>
-
-			<div className="flex flex-col sm:grid sm:grid-cols-2 gap-3">
-				<Link href="/dashboard/colaboradores">
-					<Button variant="outline" className="rounded-full w-full">
-						<ChevronLeft size={18} />
-						Voltar para a Equipe
-					</Button>
-				</Link>
-
-				<Link href="/dashboard/colaboradores/convidar">
-					<Button className="font-bold rounded-full w-full">
-						<UserPlus size={18} />
-						Convidar novo
-					</Button>
-				</Link>
-			</div>
-
-			{/* Dica visual */}
-			<div className="mt-12 flex items-center gap-2 text-zinc-600 text-[10px] uppercase tracking-widest bg-white/[0.02] px-6 py-2 rounded-full border border-white/5">
-				<Search size={14} />
-				<span>Verifique o identificador na URL</span>
-			</div>
-		</div>
+		<NotFound.Root
+			description="Não conseguimos localizar o perfil solicitado. O colaborador pode ter
+				sido removido da organização ou o ID fornecido é inválido."
+			helperMessage="Verifique o identificador na URL"
+			icon={UserX}
+			title="Colaborador não encontrado"
+		>
+			<NotFound.Button
+				to="/dashboard/roteiros"
+				type="outline"
+				icon={ChevronLeft}
+			>
+				Voltar para a Equipe
+			</NotFound.Button>
+			<NotFound.Button
+				to="/dashboard/roteiros/novo"
+				type="default"
+				icon={UserPlus}
+			>
+				Convidar novo
+			</NotFound.Button>
+		</NotFound.Root>
 	)
 }

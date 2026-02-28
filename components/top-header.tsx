@@ -184,7 +184,7 @@ export function TopHeader({ user }: TopHeaderProps) {
 				<div className="h-6 w-px bg-white/10" /> */}
 
 				<DropdownMenu>
-					<DropdownMenuTrigger className="flex items-center gap-3 outline-none group">
+					<DropdownMenuTrigger className="flex items-center gap-3 outline-none group cursor-pointer">
 						<div className="text-right hidden sm:block">
 							<p className="text-sm font-medium leading-none group-hover:text-primary transition-colors">
 								{user.fullName}
@@ -220,9 +220,9 @@ export function TopHeader({ user }: TopHeaderProps) {
 						>
 							<Link href="/dashboard/perfil">Meu Perfil</Link>
 						</DropdownMenuItem>
-						<DropdownMenuItem className="rounded-xl focus:bg-white/5 focus:text-primary cursor-pointer">
+						{/* <DropdownMenuItem className="rounded-xl focus:bg-white/5 focus:text-primary cursor-pointer">
 							Configurações
-						</DropdownMenuItem>
+						</DropdownMenuItem> */}
 						<DropdownMenuSeparator className="bg-white/5" />
 
 						<AlertDialog>

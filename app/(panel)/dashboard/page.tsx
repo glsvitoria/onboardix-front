@@ -128,7 +128,7 @@ export default async function DashboardPage() {
 							{reports.employees.map((emp: any) => (
 								<tr
 									key={emp.id}
-									className="hover:bg-white/[0.01] transition-colors"
+									className="transition-colors"
 								>
 									<td className="py-4 px-4">
 										<div className="flex flex-col">

@@ -3,7 +3,8 @@ export interface RequestOptions extends Omit<RequestInit, 'body'> {
 	body?: any
 }
 
-export interface RequestOptionsService extends Omit<RequestOptions, 'params'> {}
+export interface RequestOptionsService
+	extends Omit<RequestOptions, 'params' | 'body'> {}
 
 export interface ApiError {
 	message: string

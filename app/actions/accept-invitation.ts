@@ -1,7 +1,8 @@
 'use server'
 
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
+import { formatZodErrors } from '@/lib/format-zod-errors'
+import { acceptInvitationsService } from '@/services/invitations/accept'
 import { ActionState } from '@/types/action-state'
 import { redirect } from 'next/navigation'
 
@@ -29,18 +30,19 @@ export async function acceptInvitationAction(
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
-	const validated = acceptInvitationSchema.safeParse(rawData)
+	const validatedFields = acceptInvitationSchema.safeParse(rawData)
 
-	if (!validated.success) {
+	if (!validatedFields.success) {
 		return {
-			errors: validated.error.flatten().fieldErrors,
+			errors: formatZodErrors(validatedFields),
+			inputs: rawData,
+			success: false,
 		}
 	}
 
 	try {
-		await api.post('/invitations/accept', validated.data)
+		await acceptInvitationsService(validatedFields.data)
 	} catch (error: any) {
-    console.log(error)
 		return handleApiError({
 			error,
 			inputs: rawData,

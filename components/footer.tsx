@@ -11,7 +11,7 @@ export function Footer() {
         <p className="text-xs text-muted-foreground">
           {"© 2026 Onboardix. Todos os direitos reservados."}
         </p>
-        <div className="flex items-center gap-6">
+        {/* <div className="flex items-center gap-6">
           <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
             Termos
           </a>
@@ -21,7 +21,7 @@ export function Footer() {
           <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
             Contato
           </a>
-        </div>
+        </div> */}
       </div>
     </footer>
   )

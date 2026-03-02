@@ -31,7 +31,7 @@ export function FinalCTA() {
 
 						<p className="mx-auto mt-4 max-w-lg text-pretty text-lg leading-relaxed text-muted-foreground">
 							{
-								'Garanta 50% de desconto vitalício entrando no programa Beta. Vagas limitadas para empresas que querem revolucionar seu onboarding.'
+								'Garanta acesso antecipado entrando no programa Beta. Vagas limitadas para empresas que querem revolucionar seu onboarding.'
 							}
 						</p>
 
@@ -45,7 +45,7 @@ export function FinalCTA() {
 								</div>
 							) : (
 								<form action={formAction} className="flex flex-col gap-3">
-									<div className="flex gap-3">
+									<div className="flex sm:flex-row flex-col gap-3">
 										<Input
 											name="email"
 											type="email"

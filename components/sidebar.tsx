@@ -1,8 +1,8 @@
-'use client' // Importante para usar o hook usePathname
+'use client'
 
 import { Home, LayoutGrid, Users } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation' // Hook para pegar a rota atual
+import { usePathname } from 'next/navigation'
 import { LogoutButton } from './logout-button'
 
 export function Sidebar() {

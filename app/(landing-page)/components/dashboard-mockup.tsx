@@ -1,138 +1,183 @@
-import { CheckCircle2, Circle, Clock, User } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import {
+	Users,
+	CheckCircle2,
+	BarChart3,
+	TrendingUp,
+	Home,
+	LayoutGrid,
+	LogOut,
+} from 'lucide-react'
 
-export function DashboardMockup() {
+export const DashboardMockup = () => {
+	const stats = {
+		cards: {
+			totalEmployees: 24,
+			avgProgress: '72%',
+			completionRate: 85,
+			activeMembers: 12,
+		},
+		charts: {
+			recentActivity: [
+				{ date: 'SEG', count: 4 },
+				{ date: 'TER', count: 20 },
+				{ date: 'QUA', count: 8 },
+				{ date: 'QUI', count: 6 },
+				{ date: 'SEX', count: 2 },
+				{ date: 'SAB', count: 4 },
+				{ date: 'DOM', count: 12 },
+			],
+		},
+	}
+
+	const menuItems = [
+		{ name: 'Início', icon: Home, active: true },
+		{ name: 'Roteiros', icon: LayoutGrid },
+		{ name: 'Equipe', icon: Users },
+	]
+
 	return (
-		<div className="relative mx-auto max-w-4xl">
-			<div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl shadow-primary/5">
-				<div className="flex items-center gap-2 border-b border-border/60 bg-secondary/30 px-4 py-3">
-					<div className="flex gap-1.5">
-						<div className="size-3 rounded-full bg-muted-foreground/20" />
-						<div className="size-3 rounded-full bg-muted-foreground/20" />
-						<div className="size-3 rounded-full bg-muted-foreground/20" />
-					</div>
-					<div className="ml-4 flex-1">
-						<div className="mx-auto max-w-xs rounded-md bg-secondary/60 px-3 py-1 text-center text-xs text-muted-foreground">
-							app.onboardix.com/dashboard
-						</div>
-					</div>
+		<div className="w-full max-w-6xl mx-auto overflow-hidden border rounded-2xl border-white/10 bg-[#09090b] shadow-2xl">
+			<div className="flex items-center gap-2 border-b border-white/5 bg-zinc-900/50 px-6 py-4">
+				<div className="flex gap-2">
+					<div className="size-3 rounded-full bg-red-500/20 border border-red-500/40" />
+					<div className="size-3 rounded-full bg-amber-500/20 border border-amber-500/40" />
+					<div className="size-3 rounded-full bg-emerald-500/20 border border-emerald-500/40" />
 				</div>
-
-				{/* Dashboard content */}
-				<div className="grid grid-cols-1 gap-0 md:grid-cols-4">
-					{/* Sidebar */}
-					<div className="hidden border-r border-border/40 bg-secondary/20 p-4 md:block">
-						<div className="mb-6 flex items-center gap-2">
-							<div className="flex size-7 items-center justify-center rounded-md bg-primary">
-								<span className="text-xs font-bold text-primary-foreground">
-									O
-								</span>
-							</div>
-							<span className="text-sm font-semibold text-foreground">
-								Onboardix
-							</span>
-						</div>
-						<div className="flex flex-col gap-1">
-							{[
-								'Dashboard',
-								'Colaboradores',
-								'Trilhas',
-								'Documentos',
-							].map((item, i) => (
-								<div
-									key={item}
-									className={`rounded-md px-3 py-2 text-xs ${
-										i === 0
-											? 'bg-primary/10 text-primary font-medium'
-											: 'text-muted-foreground'
-									}`}
-								>
-									{item}
-								</div>
-							))}
-						</div>
-					</div>
-
-					{/* Main */}
-					<div className="col-span-1 p-4 md:col-span-3 md:p-6">
-						<div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-							<div>
-								<h3 className="text-sm font-semibold text-foreground">
-									Onboarding em andamento
-								</h3>
-								<p className="text-xs text-muted-foreground">
-									3 colaboradores ativos
-								</p>
-							</div>
-							<div className="flex gap-2">
-								<div className="rounded-md bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
-									{'87% conclu\u00eddo'}
-								</div>
-							</div>
-						</div>
-
-						<div className="flex flex-col gap-3">
-							{[
-								{
-									name: 'Ana Costa',
-									role: 'Dev Frontend',
-									progress: 95,
-									tasks: '12/12',
-									status: 'complete',
-								},
-								{
-									name: 'Pedro Lima',
-									role: 'Sales Rep',
-									progress: 68,
-									tasks: '8/12',
-									status: 'in-progress',
-								},
-								{
-									name: 'Julia Santos',
-									role: 'Designer UX',
-									progress: 25,
-									tasks: '3/12',
-									status: 'in-progress',
-								},
-							].map((person) => (
-								<div
-									key={person.name}
-									className="flex items-center gap-4 rounded-lg border border-border/40 bg-secondary/20 p-3"
-								>
-									<div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
-										<User className="size-4 text-primary" />
-									</div>
-									<div className="flex-1 min-w-0">
-										<div className="flex items-center gap-2">
-											<span className="text-xs font-medium text-foreground">
-												{person.name}
-											</span>
-											<span className="text-xs text-muted-foreground">
-												{person.role}
-											</span>
-										</div>
-										<div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-											<div
-												className="h-full rounded-full bg-primary transition-all"
-												style={{ width: `${person.progress}%` }}
-											/>
-										</div>
-									</div>
-									<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-										{person.status === 'complete' ? (
-											<CheckCircle2 className="size-3.5 text-primary" />
-										) : person.progress > 50 ? (
-											<Clock className="size-3.5 text-primary/70" />
-										) : (
-											<Circle className="size-3.5" />
-										)}
-										<span>{person.tasks}</span>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
+				<div className="ml-8 flex h-8 w-full max-w-md items-center rounded-lg bg-zinc-950 border border-white/5 px-4 text-[11px] text-zinc-500">
+					app.onboardix.com/dashboard
 				</div>
 			</div>
+
+			<div className="flex flex-col lg:flex-row">
+				<aside className="sticky hidden top-0 h-auto w-64 border-r border-white/5 lg:flex flex-col p-6 bg-[#09090b]">
+					<div className="mb-10 px-2">
+						<span className="font-bold tracking-tighter text-xl text-white uppercase">
+							ONBOARDIX
+						</span>
+					</div>
+
+					<nav className="flex-1 space-y-2 overflow-y-auto">
+						{menuItems.map((item) => {
+							return (
+								<p
+									key={item.name}
+									className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 cursor-auto ${
+										item.active
+											? 'bg-primary/10 text-primary font-semibold'
+											: 'text-zinc-500 '
+									}`}
+								>
+									<item.icon
+										size={20}
+										className={item.active ? 'text-primary' : 'text-zinc-500'}
+									/>
+									{item.name}
+								</p>
+							)
+						})}
+					</nav>
+
+					<div className="pt-6 border-t border-white/5 mt-auto">
+						<button className="flex w-full items-center gap-3 px-4 py-3 rounded-2xl text-zinc-500 transition-colors outline-none">
+							<LogOut size={20} />
+							Sair
+						</button>
+					</div>
+				</aside>
+
+				<main className="flex-1 p-8 space-y-8 bg-zinc-950/40">
+					<div className="flex items-center justify-between">
+						<div>
+							<h1 className="text-2xl font-bold text-white tracking-tight">
+								Dashboard
+							</h1>
+							<p className="text-zinc-500 text-sm">
+								Visão geral da sua organização no Onboardix.
+							</p>
+						</div>
+					</div>
+
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+						<MockStatCard
+							title="Total Membros"
+							value={stats.cards.totalEmployees}
+							icon={Users}
+							color="text-blue-500"
+						/>
+						<MockStatCard
+							title="Progresso Médio"
+							value={stats.cards.avgProgress}
+							icon={TrendingUp}
+							color="text-emerald-500"
+						/>
+						<MockStatCard
+							title="Taxa Conclusão"
+							value={`${stats.cards.completionRate}%`}
+							icon={CheckCircle2}
+							color="text-purple-500"
+						/>
+						<MockStatCard
+							title="Membros Ativos"
+							value={stats.cards.activeMembers}
+							icon={BarChart3}
+							color="text-orange-500"
+						/>
+					</div>
+
+					<div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 shadow-inner">
+						<div className="flex items-center justify-between mb-10">
+							<div>
+								<h2 className="text-lg font-semibold text-white">
+									Atividade de Conclusão
+								</h2>
+								<p className="text-xs text-zinc-500">
+									Volume de tarefas finalizadas nos últimos dias
+								</p>
+							</div>
+							<div className="flex items-center gap-2 text-[10px] font-bold text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
+								<span className="size-1.5 rounded-full bg-primary animate-pulse" />{' '}
+								LIVE UPDATES
+							</div>
+						</div>
+
+						<div className="flex items-end justify-between gap-3 h-20 px-2">
+							{stats.charts.recentActivity.map((item) => {
+								return (
+									<div
+										key={item.date}
+										className="flex-1 flex flex-col items-center gap-3 group"
+									>
+										<div
+											className={cn(
+												'w-full max-w-[40px] bg-primary/10 border-t-2 border-primary/40 rounded-t-lg transition-all duration-500 group-hover:bg-primary/20 group-hover:border-primary',
+												`h-${item.count}`
+											)}
+										/>
+										<span className="text-[9px] font-bold text-zinc-600 group-hover:text-zinc-300 uppercase tracking-tighter">
+											{item.date}
+										</span>
+									</div>
+								)
+							})}
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+	)
+}
+
+function MockStatCard({ title, value, icon: Icon, color }: any) {
+	return (
+		<div className="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl hover:bg-zinc-900/50 transition-colors">
+			<div className={`p-2 w-fit rounded-xl bg-white/5 mb-4 ${color}`}>
+				<Icon size={18} />
+			</div>
+			<p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+				{title}
+			</p>
+			<h3 className="text-2xl font-bold text-zinc-100 mt-1">{value}</h3>
 		</div>
 	)
 }

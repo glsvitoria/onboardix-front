@@ -1,7 +1,6 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Button } from '@/components/ui/button'
 import {
-	ChevronLeft,
 	CheckCircle2,
 	Circle,
 	Mail,
@@ -94,7 +93,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 						</h3>
 
 						<div className="space-y-4">
-							<div className="flex justify-between items-center p-3 rounded-2xl bg-white/[0.02]">
+							<div className="flex justify-between items-center p-3 rounded-2xl">
 								<span className="text-zinc-500 text-sm">Total de Tasks</span>
 								<span className="text-white font-bold">
 									{employee.stats.total}
@@ -152,7 +151,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 										key={task.id}
 										className={`flex items-center justify-between p-5 rounded-[24px] border transition-all ${
 											task.completed
-												? 'bg-green-500/[0.03] border-green-500/10'
+												? 'bg-green-500/3 border-green-500/10'
 												: 'bg-zinc-900/40 border-white/5'
 										}`}
 									>

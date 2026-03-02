@@ -33,8 +33,10 @@ export default async function CollaboratorsPage({
 			message: err.message,
 		})),
 		listInvitationsService({
-			init: currentPage - 1,
-			limit: ITEMS_PER_PAGE_INVITATIONS,
+			params: {
+				init: currentPage - 1,
+				limit: ITEMS_PER_PAGE_INVITATIONS,
+			},
 		}).catch((err: ServiceError) => ({
 			items: [],
 			total: 0,
@@ -103,7 +105,6 @@ export default async function CollaboratorsPage({
 												: 'border-white/5'
 										} p-6 rounded-3xl hover:border-primary/30 transition-all flex flex-col group relative overflow-hidden`}
 									>
-										{/* Background Glow - Diferente para cada estado */}
 										{hasStarted && (
 											<div className="absolute -right-10 -top-10 size-32 bg-primary/5 blur-3xl rounded-full group-hover:bg-primary/10 transition-colors" />
 										)}
@@ -233,10 +234,7 @@ export default async function CollaboratorsPage({
 								</thead>
 								<tbody className="divide-y divide-white/5">
 									{invitations.items.map((invitation: Invitation) => (
-										<tr
-											key={invitation.id}
-											className="transition-colors group"
-										>
+										<tr key={invitation.id} className="transition-colors group">
 											<td className="px-6 py-4 text-sm font-medium text-zinc-200">
 												{invitation.email}
 											</td>

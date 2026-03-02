@@ -49,7 +49,7 @@ export function Hero() {
 							</div>
 						) : (
 							<form action={formAction} className="flex flex-col gap-2">
-								<div className="flex gap-3">
+								<div className="flex sm:flex-row flex-col gap-3">
 									<Input
 										name="email" // O atributo name é vital para o FormData capturar o valor
 										type="email"

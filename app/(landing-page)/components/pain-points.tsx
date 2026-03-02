@@ -15,9 +15,9 @@ const painPoints = [
   },
   {
     icon: FolderSearch,
-    title: "Documentos e acessos centralizados",
+    title: "Links e acessos centralizados",
     description:
-      "Todos os documentos, credenciais e recursos que o novo colaborador precisa, organizados em um único fluxo.",
+      "Todos os links, credenciais e recursos que o novo colaborador precisa, organizados em um único fluxo.",
   },
 ]
 

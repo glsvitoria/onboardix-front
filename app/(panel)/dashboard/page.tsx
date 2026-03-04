@@ -107,7 +107,7 @@ export default async function DashboardPage({
 				</div>
 
 				<div className="flex items-end justify-between gap-4 h-48 px-2">
-					{generalStats.charts.history.map((item: any) => {
+					{generalStats.charts.history.map((item) => {
 						const heightPercentage = Math.min((item.count / 20) * 100, 100)
 						return (
 							<div
@@ -115,7 +115,6 @@ export default async function DashboardPage({
 								className="flex-1 flex flex-col items-center gap-4 group"
 							>
 								<div className="relative w-full flex flex-col items-center">
-									{/* Tooltip fixa suave que aparece no hover */}
 									<span className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-all bg-zinc-800 text-primary text-xs font-bold px-2 py-1 rounded-md border border-white/10 z-10 shadow-xl">
 										{item.count}
 									</span>
@@ -163,30 +162,30 @@ export default async function DashboardPage({
 									</td>
 								</tr>
 							) : (
-								employeesResume.employees.map((emp: any) => (
+								employeesResume.employees.map((employee) => (
 									<tr
-										key={emp.id}
+										key={employee.id}
 										className="transition-colors hover:bg-white/1"
 									>
 										<td className="py-4 px-4">
 											<div className="flex flex-col">
 												<span className="text-zinc-200 font-medium">
-													{emp.name}
+													{employee.name}
 												</span>
 												<span className="text-xs text-zinc-500">
-													{emp.email}
+													{employee.email}
 												</span>
 											</div>
 										</td>
 										<td className="py-4 px-4">
 											<span
 												className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${
-													emp.status === 'COMPLETED'
+													employee.status === 'COMPLETED'
 														? 'bg-emerald-500/10 text-emerald-500'
 														: 'bg-orange-500/10 text-orange-500'
 												}`}
 											>
-												{emp.status === 'COMPLETED'
+												{employee.status === 'COMPLETED'
 													? 'Concluído'
 													: 'Em andamento'}
 											</span>
@@ -196,11 +195,11 @@ export default async function DashboardPage({
 												<div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
 													<div
 														className="h-full bg-primary transition-all duration-500"
-														style={{ width: `${emp.progress}%` }}
+														style={{ width: `${employee.progress}%` }}
 													/>
 												</div>
-												<span className="text-sm font-mono text-zinc-400 w-10 text-right">
-													{emp.progress}%
+												<span className="text-sm text-zinc-400 w-10 text-right">
+													{employee.progress}
 												</span>
 											</div>
 										</td>
@@ -213,7 +212,7 @@ export default async function DashboardPage({
 
 				{employeesResume.employees.length > 0 && (
 					<Pagination
-						currentPage={ currentPage}
+						currentPage={currentPage}
 						itemsPerPage={ITEMS_PER_PAGE_EMPLOYEES}
 						totalItems={employeesResume.totalEmployees}
 					/>

@@ -141,20 +141,10 @@ export default async function OnboardingPage() {
 					</h2>
 
 					<div className="grid grid-cols-1 gap-3">
-						{/* Mapeamos os itens. Como a task real está em 'task: [Object]', 
-               passamos a estrutura correta para o TaskItem 
-            */}
 						{data.userTasks
-							.sort(
-								(a: any, b: any) => (a.task?.order || 0) - (b.task?.order || 0)
-							)
-							.map((userTask: any) => (
-								<TaskItem
-									key={userTask.id}
-									task={userTask.task}
-									completed={!!userTask.completedAt}
-									userTaskId={userTask.id} // ID da relação para marcar como feito
-								/>
+							.sort((a, b) => (a.task.order || 0) - (b.task.order || 0))
+							.map((userTask) => (
+								<TaskItem key={userTask.id} userTask={userTask} />
 							))}
 					</div>
 				</section>

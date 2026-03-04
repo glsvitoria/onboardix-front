@@ -10,7 +10,7 @@ interface GeneralStatsDashboardResponse {
 	}
 	charts: {
 		taskDistribution: { name: string; value: number }[]
-		history: { date: Date; count: number }[]
+		history: { date: string; count: number }[]
 	}
 }
 

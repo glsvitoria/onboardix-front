@@ -7,6 +7,7 @@ import {
 	Home,
 	LayoutGrid,
 	LogOut,
+	LucideIcon,
 } from 'lucide-react'
 
 export const DashboardMockup = () => {
@@ -168,7 +169,14 @@ export const DashboardMockup = () => {
 	)
 }
 
-function MockStatCard({ title, value, icon: Icon, color }: any) {
+interface MockStatCardProps {
+	title: string
+	value: number | string
+	icon: LucideIcon
+	color: string
+}
+
+function MockStatCard({ title, value, icon: Icon, color }: MockStatCardProps) {
 	return (
 		<div className="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl hover:bg-zinc-900/50 transition-colors">
 			<div className={`p-2 w-fit rounded-xl bg-white/5 mb-4 ${color}`}>

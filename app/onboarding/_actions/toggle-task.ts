@@ -18,7 +18,7 @@ type State = ActionState<typeof toggleTaskSchema>
 
 export async function toggleTaskAction(
 	_prevState: State | null,
-	data: { userTaskId: string; completed: boolean }
+	formData: FormData
 ): Promise<State> {
 	const validatedFields = toggleTaskSchema.safeParse(data)
 
@@ -35,7 +35,7 @@ export async function toggleTaskAction(
 				userTaskId: validatedFields.data.userTaskId,
 			},
 			body: {
-				completed: validatedFields.data.completed,
+				completed: !validatedFields.data.completed,
 			},
 		})
 

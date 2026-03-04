@@ -39,7 +39,6 @@ export async function assignTemplateAction(
 
 		revalidatePath(`/dashboard/colaboradores/${validatedFields.data.userId}`)
 	} catch (error: any) {
-		console.log(error)
 		return handleApiError({
 			error,
 		})

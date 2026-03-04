@@ -1,4 +1,18 @@
-export function StatCard({ title, value, icon: Icon, color }: any) {
+import { LucideIcon } from 'lucide-react'
+
+export interface StatCardProps {
+	title: string
+	value: number | string
+	icon: LucideIcon
+	color: string
+}
+
+export const StatCard = ({
+	title,
+	value,
+	icon: Icon,
+	color,
+}: StatCardProps) => {
 	return (
 		<div className="bg-[#09090b] border border-white/5 p-6 rounded-3xl">
 			<div className="flex items-center justify-between mb-4">

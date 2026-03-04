@@ -70,12 +70,10 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 
 			<Separator className="bg-white/5 mb-12" />
 
-			{/* Conteúdo das Atividades */}
 			<div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
 				<div className="space-y-16">
-					{template.tasks.map((task: any, index: number) => (
+					{template.tasks.map((task, index) => (
 						<section key={task.id} className="relative pl-12 group">
-							{/* Linha do tempo visual */}
 							<div className="absolute left-[18px] top-0 bottom-0 w-px bg-zinc-800 group-last:bg-transparent" />
 							<div className="absolute left-0 top-0 size-9 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center text-sm font-bold text-zinc-300 z-10">
 								{index + 1}
@@ -94,7 +92,6 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 					))}
 				</div>
 
-				{/* Sidebar de Resumo */}
 				<aside className="space-y-6">
 					<div className="sticky top-8 bg-zinc-900/50 border border-white/5 rounded-3xl p-6">
 						<h3 className="flex items-center gap-2 font-bold text-white mb-4 text-sm uppercase tracking-wider">
@@ -102,7 +99,7 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 							Índice das Etapas
 						</h3>
 						<nav className="space-y-2">
-							{template.tasks.map((task: any, index: number) => (
+							{template.tasks.map((task, index) => (
 								<div
 									key={task.id}
 									className="flex items-center gap-3 text-sm text-zinc-400 py-1"

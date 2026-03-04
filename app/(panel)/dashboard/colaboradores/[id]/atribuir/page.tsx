@@ -83,7 +83,7 @@ export default async function AssignTemplatePage({
 				/>
 			) : (
 				<div className="grid grid-cols-1 gap-4">
-					{templates.items.map((template: any) => (
+					{templates.items.map((template) => (
 						<div
 							key={template.id}
 							className="group bg-zinc-900/40 border border-white/5 p-6 rounded-[32px] flex items-center justify-between hover:border-primary/50 transition-all"

@@ -23,7 +23,7 @@ export async function toggleUserTasksService(
 
 	try {
 		const response = await api.patch<ToggleUserTasksResponse>(
-			`/user-tasks/${params.userTaskId}`,
+			`/user-tasks/${params.userTaskId}/toggle`,
 			body,
 			options
 		)

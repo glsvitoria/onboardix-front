@@ -23,7 +23,6 @@ export async function deleteTemplatesService(
 
 		return response
 	} catch (error: any) {
-		console.log(error)
 		throw new ServiceError(
 			error?.response?.data?.message || error?.message,
 			error?.response?.status || 500

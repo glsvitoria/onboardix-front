@@ -11,6 +11,10 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { AssignButton } from './_components/assign-button'
+import { listTemplatesService } from '@/services/templates/list'
+import { ServiceError } from '@/types/service-error'
+
+const ITEMS_PER_PAGE_TEMPLATES = 9
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -24,19 +28,18 @@ export default async function AssignTemplatePage({
 	const { id } = await params
 	const { page } = await searchParams
 	const currentPage = Number(page) || 1
-	const limit = 6
 
-	// Busca templates paginados e detalhes do colaborador
-	const [templatesData, employee] = await Promise.all([
-		api
-			.get<any>(`/templates?init=${(currentPage - 1) * limit}&limit=${limit}`)
-			.catch(() => ({ templates: [], total: 0 })),
+	const [templates, employee] = await Promise.all([
+		listTemplatesService({
+			init: (currentPage - 1) * ITEMS_PER_PAGE_TEMPLATES,
+			limit: ITEMS_PER_PAGE_TEMPLATES,
+		}).catch((err: ServiceError) => ({
+			items: [],
+			total: 0,
+			message: err.message,
+		})),
 		api.get<any>(`/employees/${id}/detail`).catch(() => null),
 	])
-
-	const templates = templatesData.templates || []
-	const totalTemplates = templatesData.total || 0
-	const totalPages = Math.ceil(totalTemplates / limit)
 
 	return (
 		<div className="p-8 max-w-4xl mx-auto space-y-8">
@@ -58,7 +61,7 @@ export default async function AssignTemplatePage({
 					</p>
 				</div>
 
-				{templates.length > 0 && (
+				{templates.items.length > 0 && (
 					<Button
 						asChild
 						variant="outline"
@@ -72,7 +75,7 @@ export default async function AssignTemplatePage({
 			</div>
 
 			{/* Estado Vazio */}
-			{templates.length === 0 ? (
+			{templates.items.length === 0 ? (
 				<div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-[40px] bg-zinc-900/20 text-center px-6">
 					<div className="size-20 rounded-3xl bg-zinc-800 flex items-center justify-center text-zinc-600 mb-6">
 						<LayoutTemplate size={40} />
@@ -96,7 +99,7 @@ export default async function AssignTemplatePage({
 			) : (
 				<>
 					<div className="grid grid-cols-1 gap-4">
-						{templates.map((template: any) => (
+						{templates.items.map((template: any) => (
 							<div
 								key={template.id}
 								className="group bg-zinc-900/40 border border-white/5 p-6 rounded-[32px] flex items-center justify-between hover:border-primary/50 transition-all"
@@ -121,7 +124,7 @@ export default async function AssignTemplatePage({
 					</div>
 
 					{/* Paginação */}
-					{totalPages > 1 && (
+					{templates.total / ITEMS_PER_PAGE_TEMPLATES > 1 && (
 						<div className="flex items-center justify-center gap-2 pt-4">
 							<Button
 								asChild
@@ -137,13 +140,13 @@ export default async function AssignTemplatePage({
 							<span className="text-sm text-zinc-500 px-4">
 								Página{' '}
 								<span className="text-white font-bold">{currentPage}</span> de{' '}
-								{totalPages}
+								{templates.total / ITEMS_PER_PAGE_TEMPLATES}
 							</span>
 
 							<Button
 								asChild
 								variant="outline"
-								disabled={currentPage >= totalPages}
+								disabled={currentPage >= templates.total / ITEMS_PER_PAGE_TEMPLATES}
 								className="border-white/5 bg-zinc-900/50 rounded-xl disabled:opacity-30"
 							>
 								<Link href={`?page=${currentPage + 1}`}>
@@ -156,7 +159,7 @@ export default async function AssignTemplatePage({
 			)}
 
 			{/* Info Box */}
-			{templates.length > 0 && (
+			{templates.items.length > 0 && (
 				<div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-2xl flex gap-3 items-start">
 					<Info size={18} className="text-blue-500 shrink-0 mt-0.5" />
 					<p className="text-xs text-zinc-400 leading-relaxed">

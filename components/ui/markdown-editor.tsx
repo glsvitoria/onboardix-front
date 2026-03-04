@@ -70,7 +70,7 @@ export function MarkdownEditor({
 						<div className="flex items-center gap-2 px-3 py-1 mb-2 border-b border-zinc-800 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
 							Preview
 						</div>
-						<div className="min-h-[200px] p-3 prose prose-invert max-w-none break-words">
+						<div className="min-h-[200px] p-3 prose prose-invert max-w-none">
 							{value ? (
 								<ReactMarkdown>{value}</ReactMarkdown>
 							) : (

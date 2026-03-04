@@ -1,7 +1,7 @@
 'use server'
 
 import { ActionState } from '@/types/action-state'
-import { ACCESS_TOKEN } from '@/common/token'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/common/token'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
@@ -26,22 +26,37 @@ export async function loginAction(
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			inputs: rawInput,
+			success: false,
 		}
 	}
 
 	try {
-		const { access_token } = await loginAuthService({
+		const {
+			accessToken,
+			accessTokenExpiresAt,
+			refreshToken,
+			refreshTokenExpiresAt,
+		} = await loginAuthService({
 			body: validatedFields.data,
 		})
 
 		const cookieStore = await cookies()
 
-		cookieStore.set(ACCESS_TOKEN, access_token, {
+		const cookieOptions = {
 			path: '/',
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'lax',
-			maxAge: 60 * 60 * 24 * 7, // 7 dias
+			sameSite: 'lax' as const,
+		}
+
+		cookieStore.set(ACCESS_TOKEN, accessToken, {
+			...cookieOptions,
+			expires: new Date(accessTokenExpiresAt),
+		})
+
+		cookieStore.set(REFRESH_TOKEN, refreshToken, {
+			...cookieOptions,
+			expires: new Date(refreshTokenExpiresAt),
 		})
 	} catch (error: any) {
 		return handleApiError({

@@ -4,9 +4,10 @@ import { useActionState, useState, useEffect } from 'react'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { FormInput } from '@/components/ui/form-input'
 import { Button } from '@/components/ui/button'
-import { Type } from 'lucide-react'
+import { Trash2, Type } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { updateTemplateAction } from '@/app/actions/update-template'
+import { Task } from '@/types/task'
 
 export function EditTemplateForm({
 	id,
@@ -17,14 +18,14 @@ export function EditTemplateForm({
 }) {
 	const router = useRouter()
 
-	const updateActionWithId = updateTemplateAction.bind(null, id)
-	const [state, formAction, isPending] = useActionState(updateActionWithId, {
+	const [state, formAction, isPending] = useActionState(updateTemplateAction, {
 		inputs: initialData,
+		success: false,
 	})
 
-	const [tasks, setTasks] = useState(
-		initialData.tasks || [{ title: '', content: '' }]
-	)
+	const [tasks, setTasks] = useState<
+		{ id?: string; title: string; content?: string }[]
+	>(initialData.tasks || [{ title: '', content: '' }])
 
 	const handleTaskChange = (
 		index: number,
@@ -45,10 +46,12 @@ export function EditTemplateForm({
 		if (state.success) {
 			router.push(`/dashboard/roteiros/${id}`)
 		}
-	}, [state, id, router])
+	}, [state])
 
 	return (
 		<form action={formAction} className="space-y-8">
+			<input type="hidden" name="templateId" defaultValue={id} />
+
 			<FormInput
 				label="Título"
 				name="title"
@@ -57,11 +60,32 @@ export function EditTemplateForm({
 				icon={Type}
 			/>
 
-			{tasks.map((task: any, index: number) => (
+			{tasks.map((task, index: number) => (
 				<div
 					key={index}
-					className="bg-zinc-900/40 p-6 rounded-3xl border border-white/5 space-y-4"
+					className="bg-zinc-900/40 p-6 rounded-3xl border border-white/5 space-y-4 relative"
 				>
+					{tasks.length > 0 && (
+						<Button
+							variant="ghost"
+							size="icon"
+							className="h-8 w-8 text-zinc-600 hover:text-destructive hover:bg-destructive/10 transition-colors absolute top-2 right-4 z-20"
+							onClick={() => {
+								setTasks((prev) =>
+									prev.filter((_, indexFilter) => indexFilter !== index)
+								)
+							}}
+						>
+							<Trash2 size={16} />
+						</Button>
+					)}
+
+					<input
+						type="hidden"
+						name={`tasks[${index}][id]`}
+						defaultValue={task?.id}
+					/>
+
 					<FormInput
 						label={`Título da Atividade ${index + 1}`}
 						name={`tasks[${index}][title]`}
@@ -72,7 +96,7 @@ export function EditTemplateForm({
 					/>
 
 					<MarkdownEditor
-						value={task.content}
+						value={task?.content || ""}
 						onChange={(val) => handleTaskChange(index, 'content', val)}
 						placeholder="Use # para títulos, ** para negrito, [link](url) para links..."
 						error={getTaskError(index, 'content')}

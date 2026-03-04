@@ -19,7 +19,6 @@ import Link from 'next/link'
 export default async function OnboardingPage() {
 	const session = await getSession()
 
-	// Rota que retorna o progresso: { percentage, total, completed, tasks: [...] }
 	const data = await api.get<any>('/employees/my-progress').catch(() => null)
 
 	if (!data || !data.tasks || data.tasks.length === 0) {
@@ -56,7 +55,7 @@ export default async function OnboardingPage() {
 									<AvatarFallback className="bg-zinc-900 text-xs font-bold text-primary">
 										{session?.user.fullName
 											.split(' ')
-                      .slice(0, 2)
+											.slice(0, 2)
 											.map((n) => n[0])
 											.join('')
 											.toUpperCase()}

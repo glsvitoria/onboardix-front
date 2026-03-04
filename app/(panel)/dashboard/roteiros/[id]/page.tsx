@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown'
 import { notFound } from 'next/navigation'
 import { DeleteTemplateButton } from '../components/delete-template-button'
 import { BackButton } from '@/components/back-button'
+import { showTemplatesService } from '@/services/templates/show'
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -16,7 +17,11 @@ interface PageProps {
 export default async function TemplateDetailsPage({ params }: PageProps) {
 	const { id } = await params
 
-	const template = await api.get<any>(`/templates/${id}`).catch(() => null)
+	const template = await showTemplatesService({
+		params: {
+			templateId: id,
+		},
+	})
 
 	if (!template) {
 		notFound()

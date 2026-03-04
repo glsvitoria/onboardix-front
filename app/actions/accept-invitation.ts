@@ -41,7 +41,9 @@ export async function acceptInvitationAction(
 	}
 
 	try {
-		await acceptInvitationsService(validatedFields.data)
+		await acceptInvitationsService({
+			body: validatedFields.data,
+		})
 	} catch (error: any) {
 		return handleApiError({
 			error,
@@ -49,6 +51,5 @@ export async function acceptInvitationAction(
 		})
 	}
 
-	// 3. Sucesso
 	redirect('/auth?success=account-created')
 }

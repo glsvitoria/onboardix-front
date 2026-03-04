@@ -1,33 +1,60 @@
 import { Users, CheckCircle2, BarChart3, TrendingUp } from 'lucide-react'
-import { DashboardData, OrganizationReport } from '@/types/dashboard'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { StatCard } from './_components/stat-card'
 import { HeaderPage } from './_components/header'
+import { employeesResumeDashboardService } from '@/services/dashboard/employees-resume'
+import { generalStatsDashboardService } from '@/services/dashboard/general-stats'
+import { format } from 'date-fns'
+import { Pagination } from '@/components/pagination'
+import { ServiceError } from '@/types/service-error'
 
-async function getDashboardData() {
-	const [stats, reports] = await Promise.all([
-		api.get<DashboardData>('/dashboard/general-stats', {
-			next: {
-				revalidate: 60,
+const ITEMS_PER_PAGE_EMPLOYEES = 5
+
+async function getDashboardData(currentPage: number) {
+	const [employeesResume, generalStats] = await Promise.all([
+		employeesResumeDashboardService({
+			params: {
+				init: currentPage - 1,
+				limit: ITEMS_PER_PAGE_EMPLOYEES,
 			},
-		}),
-		api.get<OrganizationReport>('/dashboard/organization-report', {
-			next: {
-				revalidate: 60,
+			options: {
+				next: {
+					revalidate: 60,
+				},
+			},
+		}).catch((err: ServiceError) => ({
+			employees: [],
+			averageProgress: 0,
+			totalEmployees: 0,
+			message: err.message,
+		})),
+		generalStatsDashboardService({
+			options: {
+				next: {
+					revalidate: 60,
+				},
 			},
 		}),
 	])
 
 	return {
-		stats,
-		reports,
+		employeesResume,
+		generalStats,
 	}
 }
 
-export default async function DashboardPage() {
-	const dashboardData = await getDashboardData()
+export default async function DashboardPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ page?: string }>
+}) {
+	const params = await searchParams
+	const currentPage = Number(params.page) || 1
+
+	const dashboardData = await getDashboardData(currentPage)
+
 	if (!dashboardData) return <div>Erro ao carregar dados...</div>
-	const { stats, reports } = dashboardData
+
+	const { employeesResume, generalStats } = dashboardData
 
 	return (
 		<div className="p-8 space-y-8">
@@ -39,25 +66,25 @@ export default async function DashboardPage() {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 				<StatCard
 					title="Total Membros"
-					value={stats.cards.totalEmployees}
+					value={generalStats.cards.totalEmployees}
 					icon={Users}
 					color="text-blue-500"
 				/>
 				<StatCard
 					title="Progresso Médio"
-					value={stats.cards.avgProgress}
+					value={generalStats.cards.avgProgress}
 					icon={TrendingUp}
 					color="text-emerald-500"
 				/>
 				<StatCard
 					title="Taxa de Conclusão"
-					value={`${stats.cards.completionRate}%`}
+					value={`${generalStats.cards.completionRate}%`}
 					icon={CheckCircle2}
 					color="text-purple-500"
 				/>
 				<StatCard
 					title="Membros Ativos"
-					value={reports.totalEmployees}
+					value={employeesResume.totalEmployees}
 					icon={BarChart3}
 					color="text-orange-500"
 				/>
@@ -80,7 +107,7 @@ export default async function DashboardPage() {
 				</div>
 
 				<div className="flex items-end justify-between gap-4 h-48 px-2">
-					{stats.charts.recentActivity.map((item: any) => {
+					{generalStats.charts.history.map((item: any) => {
 						const heightPercentage = Math.min((item.count / 20) * 100, 100)
 						return (
 							<div
@@ -103,7 +130,7 @@ export default async function DashboardPage() {
 									/>
 								</div>
 								<span className="text-[10px] font-bold text-zinc-600 group-hover:text-zinc-300 transition-colors uppercase">
-									{item.date}
+									{format(item.date, 'dd/MM/yyyy')}
 								</span>
 							</div>
 						)
@@ -125,50 +152,72 @@ export default async function DashboardPage() {
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-white/5">
-							{reports.employees.map((emp: any) => (
-								<tr
-									key={emp.id}
-									className="transition-colors"
-								>
-									<td className="py-4 px-4">
-										<div className="flex flex-col">
-											<span className="text-zinc-200 font-medium">
-												{emp.name}
-											</span>
-											<span className="text-xs text-zinc-500">{emp.email}</span>
-										</div>
-									</td>
-									<td className="py-4 px-4">
-										<span
-											className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${
-												emp.status === 'COMPLETED'
-													? 'bg-emerald-500/10 text-emerald-500'
-													: 'bg-orange-500/10 text-orange-500'
-											}`}
-										>
-											{emp.status === 'COMPLETED'
-												? 'Concluído'
-												: 'Em andamento'}
-										</span>
-									</td>
-									<td className="py-4 px-4">
-										<div className="flex items-center justify-end gap-4 min-w-[200px]">
-											<div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
-												<div
-													className="h-full bg-primary"
-													style={{ width: emp.progress }}
-												/>
-											</div>
-											<span className="text-sm font-mono text-zinc-400 w-10 text-right">
-												{emp.progress}
+							{employeesResume.employees.length === 0 ? (
+								<tr>
+									<td colSpan={3} className="py-12 text-center text-zinc-500">
+										<div className="flex flex-col items-center gap-2">
+											<span className="text-sm">
+												Nenhum colaborador encontrado.
 											</span>
 										</div>
 									</td>
 								</tr>
-							))}
+							) : (
+								employeesResume.employees.map((emp: any) => (
+									<tr
+										key={emp.id}
+										className="transition-colors hover:bg-white/1"
+									>
+										<td className="py-4 px-4">
+											<div className="flex flex-col">
+												<span className="text-zinc-200 font-medium">
+													{emp.name}
+												</span>
+												<span className="text-xs text-zinc-500">
+													{emp.email}
+												</span>
+											</div>
+										</td>
+										<td className="py-4 px-4">
+											<span
+												className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${
+													emp.status === 'COMPLETED'
+														? 'bg-emerald-500/10 text-emerald-500'
+														: 'bg-orange-500/10 text-orange-500'
+												}`}
+											>
+												{emp.status === 'COMPLETED'
+													? 'Concluído'
+													: 'Em andamento'}
+											</span>
+										</td>
+										<td className="py-4 px-4">
+											<div className="flex items-center justify-end gap-4 min-w-[200px]">
+												<div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
+													<div
+														className="h-full bg-primary transition-all duration-500"
+														style={{ width: `${emp.progress}%` }}
+													/>
+												</div>
+												<span className="text-sm font-mono text-zinc-400 w-10 text-right">
+													{emp.progress}%
+												</span>
+											</div>
+										</td>
+									</tr>
+								))
+							)}
 						</tbody>
 					</table>
 				</div>
+
+				{employeesResume.employees.length > 0 && (
+					<Pagination
+						currentPage={currentPage}
+						itemsPerPage={ITEMS_PER_PAGE_EMPLOYEES}
+						totalItems={employeesResume.totalEmployees}
+					/>
+				)}
 			</div>
 		</div>
 	)

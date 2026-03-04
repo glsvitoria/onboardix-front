@@ -74,7 +74,10 @@ export function DeleteTemplateButton({
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel className="bg-zinc-900 border-white/5 text-zinc-400 hover:bg-zinc-800 hover:text-white">
+					<AlertDialogCancel
+						className="bg-zinc-900 border-white/5 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+						disabled={isPending}
+					>
 						Cancelar
 					</AlertDialogCancel>
 					<AlertDialogAction
@@ -82,11 +85,7 @@ export function DeleteTemplateButton({
 						className="bg-destructive text-white hover:bg-destructive/90"
 						disabled={isPending}
 					>
-						{isPending ? (
-							<Loader2 className="animate-spin" />
-						) : (
-							'Excluir Roteiro'
-						)}
+						Excluir Roteiro
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

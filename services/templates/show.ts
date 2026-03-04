@@ -1,34 +1,24 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
+import { TemplateWithTasks } from '@/types/template'
 
-interface UpdateTemplatesResponse {
-	message: string
-}
+interface ShowTemplatesResponse extends TemplateWithTasks {}
 
-interface UpdateTemplatesProps {
-	body: {
-		title?: string
-		description?: string
-		tasks: {
-			title?: string
-			content?: string
-		}[]
-	}
+interface ShowTemplatesProps {
 	params: {
 		templateId: string
 	}
 	options?: RequestOptionsService
 }
 
-export async function updateTemplatesService(
-	props: UpdateTemplatesProps
-): Promise<UpdateTemplatesResponse> {
-	const { body, params, options } = props
+export async function showTemplatesService(
+	props: ShowTemplatesProps
+): Promise<ShowTemplatesResponse> {
+	const { params, options } = props
 	try {
-		const response = await api.put<UpdateTemplatesResponse>(
+		const response = await api.get<ShowTemplatesResponse>(
 			`/templates/${params.templateId}`,
-			body,
 			options
 		)
 

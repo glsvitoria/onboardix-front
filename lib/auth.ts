@@ -12,7 +12,9 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
 		if (!token) throw new Error()
 
 		const response = await profileAuthService({
-			cache: 'no-store',
+			options: {
+				cache: 'no-store',
+			},
 		})
 
 		return {

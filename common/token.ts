@@ -1,1 +1,3 @@
-export const ACCESS_TOKEN = 'onboardix_token'
+export const ACCESS_TOKEN = 'onboardix-access-token'
+
+export const REFRESH_TOKEN = 'onboardix-refresh-token'

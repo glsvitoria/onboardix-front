@@ -3,7 +3,10 @@ import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
 
 interface LoginAuthResponse {
-	access_token: string
+	accessToken: string
+  accessTokenExpiresAt: Date
+	refreshToken: string
+  refreshTokenExpiresAt: Date
 }
 
 interface LoginAuthProps {

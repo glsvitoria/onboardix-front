@@ -2,13 +2,14 @@
 
 import { Button } from '@/components/ui/button'
 import { FormInput } from '@/components/ui/form-input'
-import { ArrowRight, Loader2, Lock, Mail } from 'lucide-react'
+import { ArrowRight, Lock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { loginAction } from '../actions/login'
 
 export const FormLogin = () => {
 	const [state, formAction, isPending] = useActionState(loginAction, null)
+
 
 	return (
 		<form action={formAction} className="space-y-4">

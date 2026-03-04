@@ -6,7 +6,6 @@ export interface Template {
 	description?: string
 	createdAt: Date
 	updatedAt: Date | null
-	deletedAt: Date | null
 }
 
 export interface TemplateWithTasks extends Template {

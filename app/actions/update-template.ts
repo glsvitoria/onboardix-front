@@ -2,7 +2,6 @@
 
 import { handleApiError } from '@/lib/api/handle-error'
 import { ActionState } from '@/types/action-state'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import z from 'zod'
 import { revalidatePath } from 'next/cache'
 import { formatZodErrors } from '@/lib/format-zod-errors'
@@ -15,6 +14,7 @@ const updateTemplateSchema = z.object({
 	tasks: z
 		.array(
 			z.object({
+				id: z.string().optional(),
 				title: z.string().min(1, 'O título da atividade é obrigatório'),
 				content: z.string().optional(),
 			})
@@ -43,7 +43,11 @@ export async function updateTemplateAction(
 		}
 	})
 
-	const tasks = Object.values(tasksMap) as { title: string; content?: string }[]
+	const tasks = Object.values(tasksMap) as {
+		id?: string
+		title: string
+		content?: string
+	}[]
 
 	const validatedFields = updateTemplateSchema.safeParse({
 		templateId: rawData.templateId as string,

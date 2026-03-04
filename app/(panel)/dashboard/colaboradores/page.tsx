@@ -211,7 +211,7 @@ export default async function CollaboratorsPage({
 				</TabsContent>
 
 				<TabsContent value="pending">
-					<div className="bg-zinc-900/20 border border-white/5 rounded-3xl overflow-hidden">
+					<div className="rounded-3xl overflow-hidden">
 						{isInvitationsError ? (
 							<ErrorState to="/dashboard/colaboradores">
 								{invitations.message}

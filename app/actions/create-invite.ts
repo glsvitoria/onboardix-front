@@ -39,9 +39,9 @@ export async function createInviteAction(
 		await api.post('/invitations', validatedFields.data)
 
 		revalidatePath('/dashboard/colaboradores')
+
 		return { success: true }
 	} catch (error: any) {
-		console.log(error)
 		return handleApiError({
 			error,
 			inputs: rawData,

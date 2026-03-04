@@ -1,11 +1,11 @@
 'use client'
 
-import { createInviteAction } from '@/app/actions/create-invite'
 import { Button } from '@/components/ui/button'
 import { FormInput } from '@/components/ui/form-input'
 import { Mail, Send } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useActionState, useEffect } from 'react'
+import { createInviteAction } from '../../_actions/create-invite'
 
 export const FormInvite = () => {
 	const router = useRouter()

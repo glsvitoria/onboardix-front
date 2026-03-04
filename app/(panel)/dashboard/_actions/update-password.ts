@@ -1,6 +1,5 @@
 'use server'
 
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { handleApiError } from '@/lib/api/handle-error'
 import { formatZodErrors } from '@/lib/format-zod-errors'
 import { updatePasswordUsersService } from '@/services/users/update-password'

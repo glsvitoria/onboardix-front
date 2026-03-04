@@ -1,4 +1,3 @@
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Rocket, BookOpen, User } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
@@ -15,13 +14,14 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
+import { myProgressEmployeesService } from '@/services/employees/my-progress'
 
 export default async function OnboardingPage() {
 	const session = await getSession()
 
-	const data = await api.get<any>('/employees/my-progress').catch(() => null)
+	const data = await myProgressEmployeesService({})
 
-	if (!data || !data.tasks || data.tasks.length === 0) {
+	if (!data || !data.userTasks || data.userTasks.length === 0) {
 		return (
 			<div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
 				<Rocket size={48} className="text-zinc-700 mb-6" />
@@ -144,7 +144,7 @@ export default async function OnboardingPage() {
 						{/* Mapeamos os itens. Como a task real está em 'task: [Object]', 
                passamos a estrutura correta para o TaskItem 
             */}
-						{data.tasks
+						{data.userTasks
 							.sort(
 								(a: any, b: any) => (a.task?.order || 0) - (b.task?.order || 0)
 							)

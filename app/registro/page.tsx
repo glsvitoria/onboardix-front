@@ -1,7 +1,6 @@
 'use client'
 
 import { useActionState } from 'react'
-import { registerOrgAction } from '@/app/actions/register-org'
 import { Button } from '@/components/ui/button'
 import {
 	Building2,
@@ -13,9 +12,10 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { FormInput } from '@/components/ui/form-input'
+import { registerOrgAction } from './_actions/register-org'
 
 export default function RegisterOrgPage() {
-	const [state, formAction, isPending] = useActionState(registerOrgAction, {})
+	const [state, formAction, isPending] = useActionState(registerOrgAction, null)
 
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
@@ -25,7 +25,7 @@ export default function RegisterOrgPage() {
 
 			<div className="relative z-10 w-full max-w-[500px]">
 				<div className="rounded-3xl border border-border/40 bg-card/50 p-8 backdrop-blur-xl shadow-2xl">
-					{state.success ? (
+					{state?.success ? (
 						<div className="py-8 text-center animate-in zoom-in duration-300">
 							<CheckCircle2 className="mx-auto size-12 text-primary mb-4" />
 							<h1 className="text-2xl font-bold">Tudo pronto!</h1>
@@ -56,9 +56,9 @@ export default function RegisterOrgPage() {
 										name="companyName"
 										icon={Building2}
 										placeholder="Nome da empresa"
-										defaultValue={state.inputs?.companyName}
+										defaultValue={state?.inputs?.companyName}
 										disabled={isPending}
-										error={state.errors?.companyName}
+										error={state?.errors?.companyName}
 									/>
 
 									<FormInput
@@ -66,9 +66,9 @@ export default function RegisterOrgPage() {
 										name="ownerName"
 										icon={User}
 										placeholder="Seu nome"
-										defaultValue={state.inputs?.ownerName}
+										defaultValue={state?.inputs?.ownerName}
 										disabled={isPending}
-										error={state.errors?.ownerName}
+										error={state?.errors?.ownerName}
 									/>
 								</div>
 
@@ -78,9 +78,9 @@ export default function RegisterOrgPage() {
 									type="email"
 									icon={Mail}
 									placeholder="email@empresa.com"
-									defaultValue={state.inputs?.email}
+									defaultValue={state?.inputs?.email}
 									disabled={isPending}
-									error={state.errors?.email}
+									error={state?.errors?.email}
 								/>
 
 								<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -90,9 +90,9 @@ export default function RegisterOrgPage() {
 										type="password"
 										icon={Lock}
 										placeholder="••••••"
-										defaultValue={state.inputs?.password}
+										defaultValue={state?.inputs?.password}
 										disabled={isPending}
-										error={state.errors?.password}
+										error={state?.errors?.password}
 									/>
 
 									<FormInput
@@ -101,15 +101,15 @@ export default function RegisterOrgPage() {
 										type="password"
 										icon={Lock}
 										placeholder="••••••"
-										defaultValue={state.inputs?.confirmPassword}
+										defaultValue={state?.inputs?.confirmPassword}
 										disabled={isPending}
-										error={state.errors?.confirmPassword}
+										error={state?.errors?.confirmPassword}
 									/>
 								</div>
 
-								{state.errors?.global && (
+								{state?.errors?.global && (
 									<div className="p-3 rounded-lg bg-destructive/10 text-destructive text-xs text-center font-medium animate-in shake-200">
-										{state.errors.global}
+										{state?.errors.global}
 									</div>
 								)}
 

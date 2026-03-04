@@ -1,9 +1,9 @@
 import { Footer } from '@/components/footer'
-import { Features } from './components/features'
-import { FinalCTA } from './components/final-cta'
-import { Header } from './components/header'
-import { Hero } from './components/hero'
-import { PainPoints } from './components/pain-points'
+import { Features } from './_components/features'
+import { FinalCTA } from './_components/final-cta'
+import { Header } from './_components/header'
+import { Hero } from './_components/hero'
+import { PainPoints } from './_components/pain-points'
 
 export default function Page() {
 	return (

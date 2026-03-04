@@ -11,14 +11,14 @@ export default function EmployeeNotFound() {
 			title="Colaborador não encontrado"
 		>
 			<NotFound.Button
-				to="/dashboard/roteiros"
+				to="/dashboard/colaboradores"
 				type="outline"
 				icon={ChevronLeft}
 			>
 				Voltar para a Equipe
 			</NotFound.Button>
 			<NotFound.Button
-				to="/dashboard/roteiros/novo"
+				to="/dashboard/colaboradores/convidar"
 				type="default"
 				icon={UserPlus}
 			>

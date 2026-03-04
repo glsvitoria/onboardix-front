@@ -57,7 +57,7 @@ export default async function DashboardPage({
 	const { employeesResume, generalStats } = dashboardData
 
 	return (
-		<div className="p-8 space-y-8">
+		<>
 			<HeaderPage
 				title="Dashboard"
 				description="Visão geral da sua organização no Onboardix."
@@ -213,12 +213,12 @@ export default async function DashboardPage({
 
 				{employeesResume.employees.length > 0 && (
 					<Pagination
-						currentPage={currentPage}
+						currentPage={ currentPage}
 						itemsPerPage={ITEMS_PER_PAGE_EMPLOYEES}
 						totalItems={employeesResume.totalEmployees}
 					/>
 				)}
 			</div>
-		</div>
+		</>
 	)
 }

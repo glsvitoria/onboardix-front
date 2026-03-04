@@ -1,6 +1,8 @@
-Criar service para todas as chamadas de API e colocar as actions nas suas respectivas páginas
 Rever toggle task action
-Criar componente geral para container das páginas
+Adicionar toast para repostas de API
+Adicionar catch nas requisições feitas nas páginas para não quebrar
+DeleteTemplateButton
+Validar any's
 
 ---Publicar---
 

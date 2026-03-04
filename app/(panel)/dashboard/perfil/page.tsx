@@ -19,7 +19,7 @@ export default async function ProfilePage() {
 	}
 
 	return (
-		<div className="p-8 max-w-4xl mx-auto space-y-10">
+		<div>
 			<div>
 				<h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
 				<p className="text-zinc-500 mt-2">

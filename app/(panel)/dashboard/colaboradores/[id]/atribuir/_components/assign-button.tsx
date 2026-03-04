@@ -3,7 +3,8 @@
 import { useActionState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
-import { assignTemplateAction } from '@/app/actions/assign-template'
+import { assignTemplateAction } from '@/app/(panel)/dashboard/_actions/assign-template'
+
 
 export function AssignButton({
 	employeeId,
@@ -12,14 +13,14 @@ export function AssignButton({
 	employeeId: string
 	templateId: string
 }) {
-	const [state, formAction, isPending] = useActionState(
+	const [_, formAction, isPending] = useActionState(
 		assignTemplateAction,
 		null
 	)
 
 	return (
 		<form action={formAction}>
-			<input type="hidden" name="employeeId" defaultValue={employeeId} />
+			<input type="hidden" name="userId" defaultValue={employeeId} />
 
 			<input type="hidden" name="templateId" defaultValue={templateId} />
 

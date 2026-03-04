@@ -1,7 +1,7 @@
 'use client'
 
 import { LogOut } from 'lucide-react'
-import { logoutAction } from '@/app/actions/logout'
+import { logoutAction } from '@/app/_actions/logout'
 import { cn } from '@/lib/utils'
 import {
 	Dialog,
@@ -60,10 +60,7 @@ export function LogoutButton({
 
 				<DialogFooter className="flex flex-row gap-3 mt-4">
 					<DialogClose asChild>
-						<Button
-							variant="outline"
-							className="flex-1 rounded-xl"
-						>
+						<Button variant="outline" className="flex-1 rounded-xl">
 							Cancelar
 						</Button>
 					</DialogClose>

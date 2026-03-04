@@ -5,7 +5,7 @@ import { FormInput } from '@/components/ui/form-input'
 import { ArrowRight, Lock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { loginAction } from '../actions/login'
+import { loginAction } from './_actions/login'
 
 export const FormLogin = () => {
 	const [state, formAction, isPending] = useActionState(loginAction, null)

@@ -3,7 +3,7 @@ import { BackButton } from '@/components/back-button'
 
 export default function NewTemplatePage() {
 	return (
-		<div className="p-8 max-w-3xl mx-auto">
+		<>
 			<div className="mb-8">
 				<BackButton to="/dashboard/roteiros">Voltar para Roteiros</BackButton>
 
@@ -14,6 +14,6 @@ export default function NewTemplatePage() {
 			</div>
 
 			<FormNewTemplate />
-		</div>
+		</>
 	)
 }

@@ -1,4 +1,3 @@
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Button } from '@/components/ui/button'
 import {
 	CheckCircle2,
@@ -15,6 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { notFound } from 'next/navigation'
 import { BackButton } from '@/components/back-button'
+import { showEmployeesService } from '@/services/employees/show'
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -23,18 +23,20 @@ interface PageProps {
 export default async function CollaboratorDetailPage({ params }: PageProps) {
 	const { id } = await params
 
-	const employee = await api
-		.get<any>(`/employees/${id}/detail`)
-		.catch(() => null)
+	const employee = await showEmployeesService({
+		params: {
+			employeeId: id,
+		},
+	})
 
 	if (!employee) {
 		notFound()
 	}
 
-	const hasTasks = employee.stats.total > 0
+	const hasTasks = employee.userTasks.length > 0
 
 	return (
-		<div className="p-8 max-w-5xl mx-auto space-y-8">
+		<>
 			<BackButton to="/dashboard/colaboradores">Voltar para Equipe</BackButton>
 
 			<div
@@ -85,7 +87,6 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-				{/* Coluna Lateral: Stats */}
 				<div className="space-y-6">
 					<div className="bg-zinc-900/40 border border-white/5 p-6 rounded-[32px] space-y-6">
 						<h3 className="text-white font-bold flex items-center gap-2">
@@ -133,7 +134,6 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 					)}
 				</div>
 
-				{/* Coluna Principal: Lista de Tasks */}
 				<div className="md:col-span-2 space-y-6">
 					<div className="flex items-center justify-between">
 						<h3 className="text-white font-bold text-xl flex items-center gap-2">
@@ -144,19 +144,19 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 
 					<div className="space-y-3">
 						{hasTasks ? (
-							employee.tasks
-								.sort((a: any, b: any) => a.order - b.order)
-								.map((task: any) => (
+							employee.userTasks
+								.sort((a, b) => a.task.order - b.task.order)
+								.map((userTask) => (
 									<div
-										key={task.id}
+										key={userTask.id}
 										className={`flex items-center justify-between p-5 rounded-[24px] border transition-all ${
-											task.completed
+											userTask.completedAt
 												? 'bg-green-500/3 border-green-500/10'
 												: 'bg-zinc-900/40 border-white/5'
 										}`}
 									>
 										<div className="flex items-center gap-4">
-											{task.completed ? (
+											{userTask.completedAt ? (
 												<div className="text-green-500">
 													<CheckCircle2 size={24} />
 												</div>
@@ -168,24 +168,24 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 											<div>
 												<p
 													className={`font-semibold ${
-														task.completed
+														userTask.completedAt
 															? 'text-zinc-400 line-through'
 															: 'text-zinc-200'
 													}`}
 												>
-													{task.title}
+													{userTask.task.title}
 												</p>
-												{task.completedAt && (
+												{userTask.completedAt && (
 													<span className="text-[10px] text-zinc-600 flex items-center gap-1">
 														<Clock size={10} /> Concluído em{' '}
-														{new Date(task.completedAt).toLocaleDateString(
+														{new Date(userTask.completedAt).toLocaleDateString(
 															'pt-BR'
 														)}
 													</span>
 												)}
 											</div>
 										</div>
-										{!task.completed && (
+										{!userTask.completedAt && (
 											<Badge
 												variant="outline"
 												className="text-[10px] border-zinc-800 text-zinc-500"
@@ -221,6 +221,6 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }

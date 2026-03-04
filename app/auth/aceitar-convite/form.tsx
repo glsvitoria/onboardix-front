@@ -1,10 +1,10 @@
 'use client'
 
-import { acceptInvitationAction } from '@/app/actions/accept-invitation'
 import { Button } from '@/components/ui/button'
 import { FormInput } from '@/components/ui/form-input'
 import { Lock, User } from 'lucide-react'
 import { useActionState } from 'react'
+import { acceptInvitationAction } from '../_actions/accept-invitation'
 
 interface AcceptInvitationFormProps {
 	token: string

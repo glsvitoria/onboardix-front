@@ -1,4 +1,4 @@
-import { Plus, FileText, Layers, Calendar } from 'lucide-react'
+import { Plus, FileText, Layers, Calendar, LayoutTemplate } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'
@@ -31,7 +31,7 @@ export default async function TemplatesPage({
 	const isTemplatesError = 'message' in templates
 
 	return (
-		<div className="p-8 max-w-7xl mx-auto space-y-8">
+		<>
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 				<HeaderPage
 					title="Roteiros"
@@ -95,7 +95,16 @@ export default async function TemplatesPage({
 								</div>
 							))
 						) : (
-							<EmptyState>Nenhum roteiro ativo encontrado.</EmptyState>
+							<EmptyState
+								description="Você ainda não possui templates de onboarding criados para a sua
+						organização."
+								icon={LayoutTemplate}
+								title="Nenhum roteiro encontrado"
+								button={{
+									text: 'Criar meu primeiro roteiro',
+									to: '/dashboard/templates/novo',
+								}}
+							/>
 						)}
 					</div>
 
@@ -110,6 +119,6 @@ export default async function TemplatesPage({
 					<p className="text-zinc-500">Nenhum roteiro encontrado.</p>
 				</div>
 			)}
-		</div>
+		</>
 	)
 }

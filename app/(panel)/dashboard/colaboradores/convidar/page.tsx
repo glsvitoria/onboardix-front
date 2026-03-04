@@ -3,7 +3,7 @@ import { BackButton } from '@/components/back-button'
 
 export default function InvitePage() {
 	return (
-		<div className="max-w-xl mx-auto p-8">
+		<>
 			<BackButton to="/dashboard/colaboradores">Voltar para Equipe</BackButton>
 
 			<div className="space-y-2 mb-8">
@@ -15,6 +15,6 @@ export default function InvitePage() {
 			</div>
 
 			<FormInvite />
-		</div>
+		</>
 	)
 }

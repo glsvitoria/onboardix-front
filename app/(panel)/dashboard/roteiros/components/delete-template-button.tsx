@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, Loader2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -15,9 +15,9 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { toast } from 'sonner' // Ou sua biblioteca de preferência
-import { deleteTemplateAction } from '@/app/actions/delete-template'
+import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { deleteTemplateAction } from '../../_actions/delete-template'
 
 interface DeleteTemplateButtonProps {
 	id: string
@@ -39,16 +39,7 @@ export function DeleteTemplateButton({
 		const result = await deleteTemplateAction(id)
 		setIsPending(false)
 
-		if (result?.success) {
-			if (result?.success) {
-				toast.success('Roteiro excluído com sucesso')
-				if (redirectTo) {
-					router.push(redirectTo)
-				}
-			}
-		} else {
-			toast.error('Erro ao excluir roteiro')
-		}
+
 	}
 
 	return (

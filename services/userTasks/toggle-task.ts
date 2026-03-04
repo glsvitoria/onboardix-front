@@ -2,25 +2,29 @@ import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
 
-interface AssignTemplateEmployeesResponse {
+interface ToggleUserTasksResponse {
 	message: string
 }
 
-interface AssignTemplateEmployeesProps {
+interface ToggleUserTasksProps {
 	params: {
-		userId: string
-		templateId: string
+		userTaskId: string
+	}
+	body: {
+		completed: boolean
 	}
 	options?: RequestOptionsService
 }
 
-export async function assignTemplateEmployeesService(
-	props: AssignTemplateEmployeesProps
-): Promise<AssignTemplateEmployeesResponse> {
-	const { params, options } = props
+export async function toggleUserTasksService(
+	props: ToggleUserTasksProps
+): Promise<ToggleUserTasksResponse> {
+	const { params, body, options } = props
+
 	try {
-		const response = await api.post<AssignTemplateEmployeesResponse>(
-			`/employees/${params.userId}/assign/${params.templateId}`,
+		const response = await api.patch<ToggleUserTasksResponse>(
+			`/user-tasks/${params.userTaskId}`,
+			body,
 			options
 		)
 

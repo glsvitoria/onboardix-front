@@ -1,10 +1,10 @@
 'use client'
 
-import { updatePasswordAction } from '@/app/actions/update-password'
 import { FormInput } from '@/components/ui/form-input'
 import { Lock } from 'lucide-react'
 import { useActionState } from 'react'
 import { Button } from './ui/button'
+import { updatePasswordAction } from '@/app/(panel)/dashboard/_actions/update-password'
 
 export function PasswordForm() {
 	const [state, formAction, isPending] = useActionState(

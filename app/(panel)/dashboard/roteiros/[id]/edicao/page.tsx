@@ -21,7 +21,7 @@ export default async function EditTemplatePage({
 	}
 
 	return (
-		<div className="p-8 max-w-5xl mx-auto">
+		<>
 			<BackButton to={`/dashboard/roteiros/${id}`}>Voltar para Roteiro</BackButton>
 
 			<header className="mb-8">
@@ -32,6 +32,6 @@ export default async function EditTemplatePage({
 			</header>
 
 			<EditTemplateForm id={id} initialData={template} />
-		</div>
+		</>
 	)
 }

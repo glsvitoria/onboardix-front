@@ -1,6 +1,5 @@
 'use client'
 
-import { createTemplateAction } from '@/app/actions/create-template'
 import { Button } from '@/components/ui/button'
 import { FormInput } from '@/components/ui/form-input'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
@@ -8,6 +7,7 @@ import { FileText, ListPlus, Plus, Trash2, Type, X } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { useActionState, useEffect, useState } from 'react'
+import { createTemplateAction } from '../../_actions/create-template'
 
 export const FormNewTemplate = () => {
 	const [state, formAction, isPending] = useActionState(
@@ -88,7 +88,7 @@ export const FormNewTemplate = () => {
 						type="button"
 						variant="outline"
 						onClick={addTask}
-            size="sm"
+						size="sm"
 						className="rounded-xl"
 					>
 						<Plus size={14} className="mr-1" /> Adicionar Etapa

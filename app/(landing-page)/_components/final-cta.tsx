@@ -4,7 +4,7 @@ import { useActionState } from 'react' // Se estiver no React 18, use 'react-dom
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
-import { registerLeadAction } from '@/app/actions/register-lead'
+import { registerLeadAction } from '../_actions/register-lead'
 
 export function FinalCTA() {
 	const [state, formAction, isPending] = useActionState(

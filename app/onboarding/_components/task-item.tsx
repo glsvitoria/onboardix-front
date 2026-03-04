@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
-import { toggleTaskAction } from '@/app/actions/toggle-task'
+import { toggleTaskAction } from '../_actions/toggle-task'
 
 interface TaskItemProps {
 	task: any

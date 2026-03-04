@@ -1,8 +1,7 @@
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { ChevronLeft, Calendar, ListChecks, Edit } from 'lucide-react'
+import { Calendar, ListChecks, Edit } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import { notFound } from 'next/navigation'
@@ -28,7 +27,7 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 	}
 
 	return (
-		<div className="max-w-5xl mx-auto p-8">
+		<>
 			<div className="flex items-center justify-between mb-4">
 				<BackButton to="/dashboard/roteiros">Voltar para Roteiros</BackButton>
 
@@ -118,6 +117,6 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 					</div>
 				</aside>
 			</div>
-		</div>
+		</>
 	)
 }

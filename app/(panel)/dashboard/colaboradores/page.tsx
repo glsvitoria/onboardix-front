@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { UserPlus, Mail, Clock, ChevronRight, User } from 'lucide-react'
+import { UserPlus, Mail, Clock, ChevronRight, User, UserX } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { listEmployeesService } from '@/services/employees/list'
@@ -48,7 +48,7 @@ export default async function CollaboratorsPage({
 	const isInvitationsError = 'message' in invitations
 
 	return (
-		<div className="p-8 max-w-7xl mx-auto space-y-8">
+		<>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
 				<HeaderPage
 					title="Colaboradores"
@@ -85,13 +85,13 @@ export default async function CollaboratorsPage({
 				</TabsList>
 
 				<TabsContent value="active" className="space-y-6">
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						{isEmployeesError ? (
-							<ErrorState to="/dashboard/colaboradores">
-								{employees.message}
-							</ErrorState>
-						) : employees.items.length > 0 ? (
-							employees.items.map((employee) => {
+					{isEmployeesError ? (
+						<ErrorState to="/dashboard/colaboradores">
+							{employees.message}
+						</ErrorState>
+					) : employees.items.length > 0 ? (
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							{employees.items.map((employee) => {
 								const taskCount = employee.onboarding?.taskCount || 0
 								const hasStarted = employee.onboarding?.status !== 'NOT_STARTED'
 								const isPendingAssignment = taskCount === 0
@@ -197,11 +197,20 @@ export default async function CollaboratorsPage({
 										</Button>
 									</div>
 								)
-							})
-						) : (
-							<EmptyState>Nenhum colaborador ativo encontrado.</EmptyState>
-						)}
-					</div>
+							})}
+						</div>
+					) : (
+						<EmptyState
+							description="Você ainda não possui colaboradores criados para a sua
+						organização."
+							icon={UserX}
+							title="Nenhum colaborador encontrado"
+							button={{
+								text: 'Criar meu primeiro colaborador',
+								to: '/dashboard/colaboradores/convidar',
+							}}
+						/>
+					)}
 
 					<Pagination
 						totalItems={employees.total}
@@ -211,12 +220,12 @@ export default async function CollaboratorsPage({
 				</TabsContent>
 
 				<TabsContent value="pending">
-					<div className="rounded-3xl overflow-hidden">
-						{isInvitationsError ? (
-							<ErrorState to="/dashboard/colaboradores">
-								{invitations.message}
-							</ErrorState>
-						) : invitations.items.length ? (
+					{isInvitationsError ? (
+						<ErrorState to="/dashboard/colaboradores">
+							{invitations.message}
+						</ErrorState>
+					) : invitations.items.length > 0 ? (
+						<div className="rounded-3xl overflow-hidden">
 							<table className="w-full text-left border-collapse">
 								<thead>
 									<tr className="border-b border-white/5 bg-white/5">
@@ -267,12 +276,18 @@ export default async function CollaboratorsPage({
 									))}
 								</tbody>
 							</table>
-						) : (
-							<EmptyState>
-								Todos os convites foram aceitos ou não há convites pendentes.
-							</EmptyState>
-						)}
-					</div>
+						</div>
+					) : (
+						<EmptyState
+							description="Todos os convites foram aceitos ou não há convites pendentes."
+							title="Nenhum convite encontrado"
+							icon={UserX}
+							button={{
+								text: 'Convidar colaborador',
+								to: '/dashboard/colaboradores/convidar',
+							}}
+						/>
+					)}
 
 					<Pagination
 						totalItems={invitations.total}
@@ -281,6 +296,6 @@ export default async function CollaboratorsPage({
 					/>
 				</TabsContent>
 			</Tabs>
-		</div>
+		</>
 	)
 }

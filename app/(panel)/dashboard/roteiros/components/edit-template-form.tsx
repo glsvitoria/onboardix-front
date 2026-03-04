@@ -6,7 +6,7 @@ import { FormInput } from '@/components/ui/form-input'
 import { Button } from '@/components/ui/button'
 import { Trash2, Type } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { updateTemplateAction } from '@/app/actions/update-template'
+import { updateTemplateAction } from '@/app/(panel)/dashboard/_actions/update-template'
 import { Task } from '@/types/task'
 
 export function EditTemplateForm({

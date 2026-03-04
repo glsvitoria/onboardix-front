@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
 import { DashboardMockup } from './dashboard-mockup'
-import { registerLeadAction } from '@/app/actions/register-lead'
+import { registerLeadAction } from '../_actions/register-lead'
 
 export function Hero() {
 	const [state, formAction, isPending] = useActionState(

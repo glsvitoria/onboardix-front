@@ -16,7 +16,9 @@ export default async function DashboardLayout({
 			<Sidebar />
 			<div className="flex-1 flex flex-col">
 				<TopHeader user={data?.user} />
-				<main className="p-8 animate-in fade-in duration-500">{children}</main>
+				<main className="p-16 space-y-8 animate-in fade-in duration-500 max-w-7xl w-full mx-auto">
+					{children}
+				</main>
 			</div>
 		</div>
 	)

@@ -1,11 +1,11 @@
 'use client'
 
-import { updateProfileAction } from '@/app/actions/update-profile'
 import { FormInput } from '@/components/ui/form-input'
 import { UserWithOrganization } from '@/types/user'
 import { Mail, User } from 'lucide-react'
 import { useActionState } from 'react'
 import { Button } from './ui/button'
+import { updateProfileAction } from '@/app/(panel)/dashboard/_actions/update-profile'
 
 interface ProfileFormProps {
 	user?: UserWithOrganization

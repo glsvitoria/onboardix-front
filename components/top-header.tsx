@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-	Bell,
-	Search,
-	ChevronDown,
-	Loader2,
-	User,
-	FileText,
-} from 'lucide-react'
+import { Search, ChevronDown, Loader2, User, FileText } from 'lucide-react'
 
 import {
 	DropdownMenu,
@@ -22,8 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
-import { logoutAction } from '@/app/actions/logout'
-import { globalSearchAction } from '@/app/actions/globalSearch'
+import { logoutAction } from '@/app/_actions/logout'
 import { UserWithOrganization } from '@/types/user'
 import {
 	AlertDialog,
@@ -37,12 +29,12 @@ import {
 	AlertDialogTrigger,
 } from './ui/alert-dialog'
 import Link from 'next/link'
+import { globalSearchAction } from '@/app/(panel)/dashboard/_actions/globalSearch'
 
 interface TopHeaderProps {
 	user: UserWithOrganization
 }
 
-// Tipagem para os resultados unificados
 interface SearchResult {
 	id: string
 	name: string

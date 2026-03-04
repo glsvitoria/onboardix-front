@@ -1,26 +1,25 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
+import { UserWithProgress } from '@/types/user'
 
-interface AssignTemplateEmployeesResponse {
-	message: string
-}
+interface ShowEmployeesResponse extends UserWithProgress {}
 
-interface AssignTemplateEmployeesProps {
+interface ShowEmployeesProps {
 	params: {
-		userId: string
-		templateId: string
+		employeeId: string
 	}
 	options?: RequestOptionsService
 }
 
-export async function assignTemplateEmployeesService(
-	props: AssignTemplateEmployeesProps
-): Promise<AssignTemplateEmployeesResponse> {
+export async function showEmployeesService(
+	props: ShowEmployeesProps
+): Promise<ShowEmployeesResponse> {
 	const { params, options } = props
+
 	try {
-		const response = await api.post<AssignTemplateEmployeesResponse>(
-			`/employees/${params.userId}/assign/${params.templateId}`,
+		const response = await api.get<ShowEmployeesResponse>(
+			`/employees/${params.employeeId}/detail`,
 			options
 		)
 

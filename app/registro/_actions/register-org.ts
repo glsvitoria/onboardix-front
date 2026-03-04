@@ -3,7 +3,6 @@
 import { handleApiError } from '@/lib/api/handle-error'
 import { ActionState } from '@/types/action-state'
 import { z } from 'zod'
-import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { createOrganizationsService } from '@/services/organizations/create'
 import { formatZodErrors } from '@/lib/format-zod-errors'
 

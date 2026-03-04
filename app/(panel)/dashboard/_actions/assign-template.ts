@@ -24,6 +24,7 @@ export async function assignTemplateAction(
 	const validatedFields = acceptInvitationSchema.safeParse(rawData)
 
 	if (!validatedFields.success) {
+		console.log(formatZodErrors(validatedFields))
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
@@ -32,10 +33,13 @@ export async function assignTemplateAction(
 	}
 
 	try {
-		await assignTemplateEmployeesService(validatedFields.data)
+		await assignTemplateEmployeesService({
+			params: validatedFields.data,
+		})
 
 		revalidatePath(`/dashboard/colaboradores/${validatedFields.data.userId}`)
 	} catch (error: any) {
+		console.log(error)
 		return handleApiError({
 			error,
 		})

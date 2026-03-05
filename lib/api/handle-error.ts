@@ -10,5 +10,6 @@ export const handleApiError = ({ error, inputs }: HandleApiErrorProps) => {
 		},
 		inputs,
 		success: false,
+		timestamp: Date.now(),
 	}
 }

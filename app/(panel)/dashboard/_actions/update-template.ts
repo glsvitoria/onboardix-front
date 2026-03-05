@@ -17,7 +17,7 @@ const updateTemplateSchema = z.object({
 				id: z.string().optional(),
 				title: z.string().min(1, 'O título da atividade é obrigatório'),
 				content: z.string().optional(),
-			})
+			}),
 		)
 		.min(1, 'A trilha deve ter pelo menos uma atividade'),
 })
@@ -26,7 +26,7 @@ type State = ActionState<typeof updateTemplateSchema>
 
 export async function updateTemplateAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -60,6 +60,7 @@ export async function updateTemplateAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
@@ -67,7 +68,7 @@ export async function updateTemplateAction(
 	try {
 		const { templateId, ...body } = validatedFields.data
 
-		await updateTemplatesService({
+		const { message } = await updateTemplatesService({
 			body,
 			params: {
 				templateId,
@@ -77,7 +78,7 @@ export async function updateTemplateAction(
 		revalidatePath('/dashboard/roteiros')
 		revalidatePath(`/dashboard/roteiros/${templateId}`)
 
-		return { success: true }
+		return { timestamp: Date.now(), message, success: true }
 	} catch (error: any) {
 		return handleApiError({ error, inputs: rawData })
 	}

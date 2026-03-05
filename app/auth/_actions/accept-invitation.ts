@@ -26,7 +26,7 @@ type State = ActionState<typeof acceptInvitationSchema>
 
 export async function acceptInvitationAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -36,20 +36,25 @@ export async function acceptInvitationAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await acceptInvitationsService({
+		const { message } = await acceptInvitationsService({
 			body: validatedFields.data,
 		})
+
+		return {
+			timestamp: Date.now(),
+			message,
+			success: true,
+		}
 	} catch (error: any) {
 		return handleApiError({
 			error,
 			inputs: rawData,
 		})
 	}
-
-	redirect('/auth?success=account-created')
 }

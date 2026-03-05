@@ -15,7 +15,7 @@ const createTemplateSchema = z.object({
 			z.object({
 				title: z.string().min(1, 'O título da atividade é obrigatório'),
 				content: z.string().optional(),
-			})
+			}),
 		)
 		.min(1, 'A trilha deve ter pelo menos uma atividade'),
 })
@@ -24,7 +24,7 @@ type State = ActionState<typeof createTemplateSchema>
 
 export async function createTemplateAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -53,18 +53,19 @@ export async function createTemplateAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await createTemplatesService({
+		const { message } = await createTemplatesService({
 			body: validatedFields.data,
 		})
 
 		revalidatePath('/dashboard/roteiros')
 
-		return { success: true }
+		return { timestamp: Date.now(), message, success: true }
 	} catch (error: any) {
 		return handleApiError({
 			error,

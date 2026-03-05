@@ -5,12 +5,15 @@ import { Lock } from 'lucide-react'
 import { useActionState } from 'react'
 import { Button } from './ui/button'
 import { updatePasswordAction } from '@/app/(panel)/dashboard/_actions/update-password'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export function PasswordForm() {
 	const [state, formAction, isPending] = useActionState(
 		updatePasswordAction,
-		null
+		null,
 	)
+
+	useActionToast(state)
 
 	return (
 		<form className="space-y-6" action={formAction}>

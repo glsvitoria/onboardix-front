@@ -17,7 +17,7 @@ interface ToggleUserTasksProps {
 }
 
 export async function toggleUserTasksService(
-	props: ToggleUserTasksProps
+	props: ToggleUserTasksProps,
 ): Promise<ToggleUserTasksResponse> {
 	const { params, body, options } = props
 
@@ -25,14 +25,15 @@ export async function toggleUserTasksService(
 		const response = await api.patch<ToggleUserTasksResponse>(
 			`/user-tasks/${params.userTaskId}/toggle`,
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.response?.data?.message ||
+				'Ocorreu um erro ao atualizar a tarefa. Tente novamente.',
+			error?.response?.status || 500,
 		)
 	}
 }

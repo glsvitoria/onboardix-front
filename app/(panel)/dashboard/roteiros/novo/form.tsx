@@ -5,11 +5,14 @@ import { FormInput } from '@/components/ui/form-input'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { FileText, ListPlus, Plus, Trash2, Type, X } from 'lucide-react'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useState } from 'react'
 import { createTemplateAction } from '../../_actions/create-template'
+import { useActionToast } from '@/hooks/use-action-toast'
+import { useRouter } from 'next/navigation'
 
 export const FormNewTemplate = () => {
+  const router = useRouter()
+  
 	const [state, formAction, isPending] = useActionState(
 		createTemplateAction,
 		null
@@ -40,11 +43,9 @@ export const FormNewTemplate = () => {
 		return (state?.errors as Record<string, string[]>)?.[key]
 	}
 
-	useEffect(() => {
-		if (state?.success) {
-			redirect('/dashboard/roteiros')
-		}
-	}, [state])
+	useActionToast(state, () => {
+    router.push('/dashboard/roteiros')
+  })
 
 	return (
 		<form action={formAction} className="space-y-8">

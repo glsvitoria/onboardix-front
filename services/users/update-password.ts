@@ -3,7 +3,7 @@ import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
 
 interface UpdatePasswordUsersResponse {
-	access_token: string
+	message: string
 }
 
 interface UpdatePasswordUsersProps {
@@ -16,7 +16,7 @@ interface UpdatePasswordUsersProps {
 }
 
 export async function updatePasswordUsersService(
-	props: UpdatePasswordUsersProps
+	props: UpdatePasswordUsersProps,
 ): Promise<UpdatePasswordUsersResponse> {
 	const { body, options } = props
 
@@ -24,14 +24,14 @@ export async function updatePasswordUsersService(
 		const response = await api.put<UpdatePasswordUsersResponse>(
 			'/users/profile/password',
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
 			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.response?.status || 500,
 		)
 	}
 }

@@ -10,9 +10,9 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ReactMarkdown from 'react-markdown'
-import { toast } from 'sonner'
 import { toggleTaskAction } from '../_actions/toggle-task'
 import { UserTaskWithTask } from '@/types/user-task'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 interface TaskItemProps {
 	userTask: UserTaskWithTask
@@ -23,20 +23,11 @@ export function TaskItem({ userTask }: TaskItemProps) {
 
 	const [state, formAction, isPending] = useActionState(toggleTaskAction, null)
 
-	useEffect(() => {
-		if (state?.errors && Object.keys(state.errors).length > 0) {
-			const errorMessage = state.errors.global || 'Erro ao atualizar tarefa'
-			toast.error(errorMessage)
-		} else if (state && !state.errors) {
-			toast.success(
-				state.inputs?.completed ? 'Tarefa concluída!' : 'Tarefa reaberta'
-			)
-		}
-	}, [state, userTask.completedAt])
+	useActionToast(state)
 
 	return (
 		<div
-			className={`border transition-all rounded-[24px] overflow-hidden ${
+			className={`border transition-all rounded-3xl overflow-hidden ${
 				isOpen
 					? 'bg-zinc-900/60 border-white/10'
 					: 'bg-zinc-900/20 border-white/5 hover:border-white/10'
@@ -48,12 +39,17 @@ export function TaskItem({ userTask }: TaskItemProps) {
 			>
 				<div className="flex items-center gap-4">
 					<form action={formAction} onClick={(e) => e.stopPropagation()}>
+						<input type="hidden" name="userTaskId" value={userTask.id} />
+
+						<input type="hidden" name="completed" value="false" />
+
 						<label className="cursor-pointer group">
 							<input
 								type="checkbox"
 								name="completed"
+								value="true"
 								defaultChecked={!!userTask.completedAt}
-								className="peer hidden"
+								className="hidden"
 							/>
 
 							<button

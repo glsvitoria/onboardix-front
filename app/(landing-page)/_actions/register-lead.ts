@@ -14,7 +14,7 @@ type State = ActionState<typeof registerLeadSchema>
 
 export async function registerLeadAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawInput = Object.fromEntries(formData.entries())
 	const validatedFields = registerLeadSchema.safeParse(rawInput)
@@ -24,15 +24,16 @@ export async function registerLeadAction(
 			errors: formatZodErrors(validatedFields),
 			inputs: rawInput,
 			success: false,
+			timestamp: Date.now(),
 		}
 	}
 
 	try {
-		await createLeadsService({
+		const { message } = await createLeadsService({
 			body: validatedFields.data,
 		})
 
-		return { success: true }
+		return { timestamp: Date.now(), message, success: true }
 	} catch (error) {
 		return handleApiError({
 			error,

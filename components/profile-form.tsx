@@ -6,6 +6,7 @@ import { Mail, User } from 'lucide-react'
 import { useActionState } from 'react'
 import { Button } from './ui/button'
 import { updateProfileAction } from '@/app/(panel)/dashboard/_actions/update-profile'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 interface ProfileFormProps {
 	user?: UserWithOrganization
@@ -16,6 +17,8 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
 		updateProfileAction,
 		null
 	)
+
+  useActionToast(state)
 
 	return (
 		<form action={formAction} className="space-y-6">

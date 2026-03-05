@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button'
 import { FormInput } from '@/components/ui/form-input'
 import { Mail, Send } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect } from 'react'
+import { useActionState } from 'react'
 import { createInviteAction } from '../../_actions/create-invite'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export const FormInvite = () => {
 	const router = useRouter()
@@ -14,11 +15,9 @@ export const FormInvite = () => {
 		null
 	)
 
-	useEffect(() => {
-		if (state?.success) {
-			router.push('/dashboard/colaboradores')
-		}
-	}, [state, router])
+  useActionToast(state, () => {
+    router.push('/dashboard/colaboradores')
+  })
 
 	return (
 		<form action={formAction} className="space-y-6">

@@ -28,20 +28,27 @@ export async function assignTemplateAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+      timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await assignTemplateEmployeesService({
+		const {message} = await assignTemplateEmployeesService({
 			params: validatedFields.data,
 		})
 
 		revalidatePath(`/dashboard/colaboradores/${validatedFields.data.userId}`)
+
+    return {
+      timestamp: Date.now(),
+      message,
+      success: true,
+    }
+    
 	} catch (error: any) {
 		return handleApiError({
 			error,
 		})
 	}
-	redirect(`/dashboard/colaboradores/${validatedFields.data.userId}`)
 }

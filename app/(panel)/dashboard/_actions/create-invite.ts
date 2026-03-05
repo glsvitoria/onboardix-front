@@ -18,7 +18,7 @@ type State = ActionState<typeof inviteSchema>
 
 export async function createInviteAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -26,18 +26,25 @@ export async function createInviteAction(
 
 	if (!validatedFields.success) {
 		return {
-			success: false,
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
+			success: false,
 		}
 	}
 
 	try {
-		await createInvitationsService({ body: validatedFields.data })
+		const { message } = await createInvitationsService({
+			body: validatedFields.data,
+		})
 
 		revalidatePath('/dashboard/colaboradores')
 
-		return { success: true }
+		return {
+			timestamp: Date.now(),
+			message,
+			success: true,
+		}
 	} catch (error: any) {
 		return handleApiError({
 			error,

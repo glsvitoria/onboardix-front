@@ -13,17 +13,20 @@ import {
 import Link from 'next/link'
 import { FormInput } from '@/components/ui/form-input'
 import { registerOrgAction } from './_actions/register-org'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export default function RegisterOrgPage() {
 	const [state, formAction, isPending] = useActionState(registerOrgAction, null)
 
+	useActionToast(state)
+
 	return (
 		<main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12">
 			<div className="pointer-events-none absolute inset-0 overflow-hidden">
-				<div className="absolute top-0 left-1/2 size-[500px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
+				<div className="absolute top-0 left-1/2 size-125 -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
 			</div>
 
-			<div className="relative z-10 w-full max-w-[500px]">
+			<div className="relative z-10 w-full max-w-125">
 				<div className="rounded-3xl border border-border/40 bg-card/50 p-8 backdrop-blur-xl shadow-2xl">
 					{state?.success ? (
 						<div className="py-8 text-center animate-in zoom-in duration-300">

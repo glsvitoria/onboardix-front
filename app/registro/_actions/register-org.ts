@@ -23,7 +23,7 @@ type State = ActionState<typeof registerOrgSchema>
 
 export async function registerOrgAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawInput = Object.fromEntries(formData.entries())
 	const validatedFields = registerOrgSchema.safeParse(rawInput)
@@ -32,16 +32,21 @@ export async function registerOrgAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawInput,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await createOrganizationsService({
+		const { message } = await createOrganizationsService({
 			body: validatedFields.data,
 		})
 
-		return { success: true }
+		return {
+			timestamp: Date.now(),
+			message,
+			success: true,
+		}
 	} catch (error: any) {
 		return handleApiError({
 			error,

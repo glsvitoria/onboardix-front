@@ -1,13 +1,13 @@
 'use client'
 
-import { useActionState, useState, useEffect } from 'react'
+import { useActionState, useState } from 'react'
 import { MarkdownEditor } from '@/components/ui/markdown-editor'
 import { FormInput } from '@/components/ui/form-input'
 import { Button } from '@/components/ui/button'
 import { Trash2, Type } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { updateTemplateAction } from '@/app/(panel)/dashboard/_actions/update-template'
-import { Task } from '@/types/task'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export function EditTemplateForm({
 	id,
@@ -20,6 +20,7 @@ export function EditTemplateForm({
 
 	const [state, formAction, isPending] = useActionState(updateTemplateAction, {
 		inputs: initialData,
+    timestamp: Date.now(),
 		success: false,
 	})
 
@@ -30,7 +31,7 @@ export function EditTemplateForm({
 	const handleTaskChange = (
 		index: number,
 		field: 'title' | 'content',
-		value: string
+		value: string,
 	) => {
 		const newTasks = [...tasks]
 		newTasks[index][field] = value
@@ -42,11 +43,9 @@ export function EditTemplateForm({
 		return (state?.errors as Record<string, string[]>)?.[key]
 	}
 
-	useEffect(() => {
-		if (state.success) {
-			router.push(`/dashboard/roteiros/${id}`)
-		}
-	}, [state])
+	useActionToast(state, () => {
+		router.push(`/dashboard/roteiros/${id}`)
+	})
 
 	return (
 		<form action={formAction} className="space-y-8">
@@ -72,7 +71,7 @@ export function EditTemplateForm({
 							className="h-8 w-8 text-zinc-600 hover:text-destructive hover:bg-destructive/10 transition-colors absolute top-2 right-4 z-20"
 							onClick={() => {
 								setTasks((prev) =>
-									prev.filter((_, indexFilter) => indexFilter !== index)
+									prev.filter((_, indexFilter) => indexFilter !== index),
 								)
 							}}
 						>
@@ -96,7 +95,7 @@ export function EditTemplateForm({
 					/>
 
 					<MarkdownEditor
-						value={task?.content || ""}
+						value={task?.content || ''}
 						onChange={(val) => handleTaskChange(index, 'content', val)}
 						placeholder="Use # para títulos, ** para negrito, [link](url) para links..."
 						error={getTaskError(index, 'content')}

@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { handleApiError } from '@/lib/api/handle-error'
 import { loginAuthService } from '@/services/auth/login'
+import { UserRole } from '@/types/user'
 
 const loginSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -26,6 +27,7 @@ export async function loginAction(
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			inputs: rawInput,
+      timestamp: Date.now(),
 			success: false,
 		}
 	}
@@ -36,6 +38,7 @@ export async function loginAction(
 			accessTokenExpiresAt,
 			refreshToken,
 			refreshTokenExpiresAt,
+      user
 		} = await loginAuthService({
 			body: validatedFields.data,
 		})
@@ -58,6 +61,12 @@ export async function loginAction(
 			...cookieOptions,
 			expires: new Date(refreshTokenExpiresAt),
 		})
+
+    return {
+      timestamp: Date.now(),
+      message: `Login de ${user.role === UserRole.MEMBER ? 'colaborador' : 'usuário'} realizado com sucesso`,
+      success: true,
+    }
 	} catch (error: any) {
 		return handleApiError({
 			error,
@@ -65,5 +74,4 @@ export async function loginAction(
 		})
 	}
 
-	redirect('/dashboard')
 }

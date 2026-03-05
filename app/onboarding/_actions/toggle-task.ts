@@ -9,28 +9,33 @@ import { z } from 'zod'
 
 const toggleTaskSchema = z.object({
 	userTaskId: z.string().uuid('ID da tarefa inválido'),
-	completed: z.boolean({
-		message: 'O valor de completo deve ser verdadeiro ou falso',
-	}),
+	completed: z
+		.enum(['true', 'false'], {
+			message: 'Valor de completado inválido, deve ser "true" ou "false"',
+		})
+		.transform((val) => val === 'true'),
 })
 
 type State = ActionState<typeof toggleTaskSchema>
 
 export async function toggleTaskAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
-	const validatedFields = toggleTaskSchema.safeParse(data)
+	const rawData = Object.fromEntries(formData.entries())
+
+	const validatedFields = toggleTaskSchema.safeParse(rawData)
 
 	if (!validatedFields.success) {
 		return {
 			errors: formatZodErrors(validatedFields),
 			success: false,
+			timestamp: Date.now(),
 		}
 	}
 
 	try {
-		await toggleUserTasksService({
+		const { message } = await toggleUserTasksService({
 			params: {
 				userTaskId: validatedFields.data.userTaskId,
 			},
@@ -41,12 +46,12 @@ export async function toggleTaskAction(
 
 		revalidatePath('/onboarding')
 
-		return { success: true }
+		return { success: true, message, timestamp: Date.now() }
 	} catch (error: any) {
 		console.error('Toggle Task Error:', error)
 		return handleApiError({
 			error,
-			inputs: data,
+			inputs: rawData,
 		})
 	}
 }

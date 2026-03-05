@@ -116,7 +116,7 @@ export default async function OnboardingPage() {
 						</p>
 					</div>
 
-					<div className="p-8 bg-zinc-900/40 border border-white/5 rounded-[32px] space-y-4">
+					<div className="p-8 bg-zinc-900/40 border border-white/5 rounded-4xl space-y-4">
 						<div className="flex justify-between items-end">
 							<div className="space-y-1">
 								<span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">

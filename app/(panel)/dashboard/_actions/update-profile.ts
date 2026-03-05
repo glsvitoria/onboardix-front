@@ -16,7 +16,7 @@ type State = ActionState<typeof updateProfileSchema>
 
 export async function updateProfileAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -26,20 +26,22 @@ export async function updateProfileAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await updateProfileUsersService({
+		const { message } = await updateProfileUsersService({
 			body: validatedFields.data,
 		})
 
 		revalidatePath('/dashboard/perfil')
 
 		return {
+			timestamp: Date.now(),
+			message,
 			success: true,
-			inputs: rawData,
 		}
 	} catch (error: any) {
 		return handleApiError({

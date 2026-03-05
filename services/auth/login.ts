@@ -1,12 +1,14 @@
 import { fetchAdapter as api } from '@/lib/api/fetch-adapter'
 import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
+import { User } from '@/types/user'
 
 interface LoginAuthResponse {
 	accessToken: string
   accessTokenExpiresAt: Date
 	refreshToken: string
   refreshTokenExpiresAt: Date
+  user: User
 }
 
 interface LoginAuthProps {

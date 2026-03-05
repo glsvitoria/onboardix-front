@@ -6,10 +6,21 @@ import { ArrowRight, Lock, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { loginAction } from './_actions/login'
+import { useActionToast } from '@/hooks/use-action-toast'
+import { useRouter } from 'next/navigation'
 
 export const FormLogin = () => {
+	const router = useRouter()
+
 	const [state, formAction, isPending] = useActionState(loginAction, null)
 
+	useActionToast(state, () => {
+		if(state?.message && state.message.includes('colaborador')) {
+      router.push('/onboarding')
+    } else {
+      router.push('/dashboard')
+    }
+	})
 
 	return (
 		<form action={formAction} className="space-y-4">

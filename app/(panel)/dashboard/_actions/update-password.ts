@@ -25,7 +25,7 @@ type State = ActionState<typeof updatePasswordSchema>
 
 export async function updatePasswordAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawData = Object.fromEntries(formData.entries())
 
@@ -35,16 +35,19 @@ export async function updatePasswordAction(
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		await updatePasswordUsersService({
+		const { message } = await updatePasswordUsersService({
 			body: validatedFields.data,
 		})
 
 		return {
+			timestamp: Date.now(),
+			message,
 			success: true,
 		}
 	} catch (error: any) {

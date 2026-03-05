@@ -4,9 +4,10 @@ import { useActionState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { DashboardMockup } from './dashboard-mockup'
 import { registerLeadAction } from '../_actions/register-lead'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export function Hero() {
 	const [state, formAction, isPending] = useActionState(
@@ -14,11 +15,13 @@ export function Hero() {
 		null
 	)
 
+  useActionToast(state)
+
 	return (
 		<section className="relative overflow-hidden pt-32 pb-20 md:pt-44 md:pb-32">
 			<div className="pointer-events-none absolute inset-0 overflow-hidden">
-				<div className="absolute -top-40 left-1/2 size-[600px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-				<div className="absolute top-1/4 right-0 size-[400px] rounded-full bg-primary/5 blur-3xl" />
+				<div className="absolute -top-40 left-1/2 size-150 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+				<div className="absolute top-1/4 right-0 size-100 rounded-full bg-primary/5 blur-3xl" />
 			</div>
 
 			<div className="relative mx-auto max-w-6xl px-6">

@@ -5,16 +5,24 @@ import { FormInput } from '@/components/ui/form-input'
 import { Lock, User } from 'lucide-react'
 import { useActionState } from 'react'
 import { acceptInvitationAction } from '../_actions/accept-invitation'
+import { useActionToast } from '@/hooks/use-action-toast'
+import { useRouter } from 'next/navigation'
 
 interface AcceptInvitationFormProps {
 	token: string
 }
 
 export const AcceptInvitationForm = ({ token }: AcceptInvitationFormProps) => {
+	const router = useRouter()
+
 	const [state, formAction, isPending] = useActionState(
 		acceptInvitationAction,
-		null
+		null,
 	)
+
+	useActionToast(state, () => {
+		router.push('/auth?success=account-created')
+	})
 
 	return (
 		<form action={formAction} className="space-y-4">

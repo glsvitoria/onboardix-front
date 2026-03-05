@@ -56,6 +56,11 @@ export default async function DashboardPage({
 
 	const { employeesResume, generalStats } = dashboardData
 
+	const historyCountMaxInOneDay = Math.max(
+		...generalStats.charts.history.map((item) => item.count),
+		0,
+	)
+
 	return (
 		<>
 			<HeaderPage
@@ -108,7 +113,9 @@ export default async function DashboardPage({
 
 				<div className="flex items-end justify-between gap-4 h-48 px-2">
 					{generalStats.charts.history.map((item) => {
-						const heightPercentage = Math.min((item.count / 20) * 100, 100)
+            const maxHeight = 160
+						const heightPixel = item.count * maxHeight / historyCountMaxInOneDay
+
 						return (
 							<div
 								key={item.date}
@@ -120,10 +127,10 @@ export default async function DashboardPage({
 									</span>
 
 									<div
-										className="w-full max-w-[60px] bg-primary/10 border-t-2 border-primary/40 rounded-t-xl transition-all duration-500 group-hover:bg-primary/20 group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]"
+										className="w-full max-w-15 bg-primary/10 border-t-2 border-primary/40 rounded-t-xl transition-all duration-500 group-hover:bg-primary/20 group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]"
 										style={{
 											height: `${
-												item.count === 0 ? '4px' : `${heightPercentage}%`
+												heightPixel === 0 ? '4px' : `${heightPixel}px`
 											}`,
 										}}
 									/>
@@ -162,49 +169,51 @@ export default async function DashboardPage({
 									</td>
 								</tr>
 							) : (
-								employeesResume.employees.map((employee) => (
-									<tr
-										key={employee.id}
-										className="transition-colors hover:bg-white/1"
-									>
-										<td className="py-4 px-4">
-											<div className="flex flex-col">
-												<span className="text-zinc-200 font-medium">
-													{employee.name}
-												</span>
-												<span className="text-xs text-zinc-500">
-													{employee.email}
-												</span>
-											</div>
-										</td>
-										<td className="py-4 px-4">
-											<span
-												className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${
-													employee.status === 'COMPLETED'
-														? 'bg-emerald-500/10 text-emerald-500'
-														: 'bg-orange-500/10 text-orange-500'
-												}`}
-											>
-												{employee.status === 'COMPLETED'
-													? 'Concluído'
-													: 'Em andamento'}
-											</span>
-										</td>
-										<td className="py-4 px-4">
-											<div className="flex items-center justify-end gap-4 min-w-[200px]">
-												<div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
-													<div
-														className="h-full bg-primary transition-all duration-500"
-														style={{ width: `${employee.progress}%` }}
-													/>
+								employeesResume.employees.map((employee) => {
+									return (
+										<tr
+											key={employee.id}
+											className="transition-colors hover:bg-white/1"
+										>
+											<td className="py-4 px-4">
+												<div className="flex flex-col">
+													<span className="text-zinc-200 font-medium">
+														{employee.name}
+													</span>
+													<span className="text-xs text-zinc-500">
+														{employee.email}
+													</span>
 												</div>
-												<span className="text-sm text-zinc-400 w-10 text-right">
-													{employee.progress}
+											</td>
+											<td className="py-4 px-4">
+												<span
+													className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md ${
+														employee.status === 'COMPLETED'
+															? 'bg-emerald-500/10 text-emerald-500'
+															: 'bg-orange-500/10 text-orange-500'
+													}`}
+												>
+													{employee.status === 'COMPLETED'
+														? 'Concluído'
+														: 'Em andamento'}
 												</span>
-											</div>
-										</td>
-									</tr>
-								))
+											</td>
+											<td className="py-4 px-4">
+												<div className="flex items-center justify-end gap-4 min-w-50">
+													<div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
+														<div
+															className="h-full bg-primary transition-all duration-500"
+															style={{ width: `${employee.progress}` }}
+														/>
+													</div>
+													<span className="text-sm text-zinc-400 w-10 text-right">
+														{employee.progress}
+													</span>
+												</div>
+											</td>
+										</tr>
+									)
+								})
 							)}
 						</tbody>
 					</table>

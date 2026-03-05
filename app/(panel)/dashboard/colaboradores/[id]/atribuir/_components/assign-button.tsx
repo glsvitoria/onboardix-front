@@ -4,7 +4,8 @@ import { useActionState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { assignTemplateAction } from '@/app/(panel)/dashboard/_actions/assign-template'
-
+import { useActionToast } from '@/hooks/use-action-toast'
+import { useRouter } from 'next/navigation'
 
 export function AssignButton({
 	employeeId,
@@ -13,10 +14,16 @@ export function AssignButton({
 	employeeId: string
 	templateId: string
 }) {
-	const [_, formAction, isPending] = useActionState(
+	const router = useRouter()
+
+	const [state, formAction, isPending] = useActionState(
 		assignTemplateAction,
-		null
+		null,
 	)
+
+	useActionToast(state, () => {
+		router.push(`/dashboard/colaboradores/${employeeId}`)
+	})
 
 	return (
 		<form action={formAction}>

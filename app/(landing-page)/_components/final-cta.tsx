@@ -3,8 +3,9 @@
 import { useActionState } from 'react' // Se estiver no React 18, use 'react-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { registerLeadAction } from '../_actions/register-lead'
+import { useActionToast } from '@/hooks/use-action-toast'
 
 export function FinalCTA() {
 	const [state, formAction, isPending] = useActionState(
@@ -12,12 +13,14 @@ export function FinalCTA() {
 		null
 	)
 
+  useActionToast(state)
+
 	return (
 		<section id="precos" className="py-20 md:py-28">
 			<div className="mx-auto max-w-6xl px-6">
 				<div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-10 text-center md:p-16">
 					<div className="pointer-events-none absolute inset-0">
-						<div className="absolute -top-20 left-1/2 size-[400px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+						<div className="absolute -top-20 left-1/2 size-100 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
 					</div>
 
 					<div className="relative">

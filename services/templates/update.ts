@@ -22,21 +22,21 @@ interface UpdateTemplatesProps {
 }
 
 export async function updateTemplatesService(
-	props: UpdateTemplatesProps
+	props: UpdateTemplatesProps,
 ): Promise<UpdateTemplatesResponse> {
 	const { body, params, options } = props
 	try {
 		const response = await api.put<UpdateTemplatesResponse>(
 			`/templates/${params.templateId}`,
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

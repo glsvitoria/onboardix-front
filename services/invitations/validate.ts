@@ -10,7 +10,7 @@ interface ValidateInvitationsProps {
 }
 
 export async function validateInvitationsService(
-	props: ValidateInvitationsProps
+	props: ValidateInvitationsProps,
 ): Promise<void> {
 	const { params, options } = props
 	try {
@@ -20,8 +20,8 @@ export async function validateInvitationsService(
 		})
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

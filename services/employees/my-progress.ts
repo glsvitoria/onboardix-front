@@ -15,21 +15,21 @@ interface MyProgressEmployeesProps {
 }
 
 export async function myProgressEmployeesService(
-	props: MyProgressEmployeesProps
+	props: MyProgressEmployeesProps,
 ): Promise<MyProgressEmployeesResponse> {
 	const { options } = props
 
 	try {
 		const response = await api.get<MyProgressEmployeesResponse>(
 			`/employees/my-progress`,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

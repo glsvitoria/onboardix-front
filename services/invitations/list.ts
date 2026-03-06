@@ -22,7 +22,7 @@ interface ListInvitationsProps {
 }
 
 export async function listInvitationsService(
-	props: ListInvitationsProps
+	props: ListInvitationsProps,
 ): Promise<ListInvitationsReturn> {
 	const { params, options } = props
 	try {
@@ -31,7 +31,7 @@ export async function listInvitationsService(
 			{
 				params,
 				...options,
-			}
+			},
 		)
 
 		return {
@@ -40,8 +40,8 @@ export async function listInvitationsService(
 		}
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

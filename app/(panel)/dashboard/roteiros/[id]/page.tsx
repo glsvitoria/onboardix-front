@@ -8,6 +8,24 @@ import { notFound } from 'next/navigation'
 import { DeleteTemplateButton } from '../components/delete-template-button'
 import { BackButton } from '@/components/back-button'
 import { showTemplatesService } from '@/services/templates/show'
+import { ServiceError } from '@/types/service-error'
+import { ErrorState } from '@/components/error-state'
+
+async function getTemplateDetailData(id: string) {
+	const template = await showTemplatesService({
+		params: {
+			templateId: id,
+		},
+	}).catch((err: ServiceError) => {
+		if (err.status === 404) notFound()
+
+		return {
+			message: err.message,
+		}
+	})
+
+	return { template }
+}
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -16,14 +34,14 @@ interface PageProps {
 export default async function TemplateDetailsPage({ params }: PageProps) {
 	const { id } = await params
 
-	const template = await showTemplatesService({
-		params: {
-			templateId: id,
-		},
-	})
+	const { template } = await getTemplateDetailData(id)
 
-	if (!template) {
-		notFound()
+	if ('message' in template) {
+		return (
+			<ErrorState to={`/dashboard/roteiros/${id}`}>
+				{template.message}
+			</ErrorState>
+		)
 	}
 
 	return (
@@ -42,7 +60,6 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 				</div>
 			</div>
 
-			{/* Hero Section */}
 			<header className="space-y-4 mb-12">
 				<div className="flex items-center gap-3">
 					<Badge
@@ -74,7 +91,7 @@ export default async function TemplateDetailsPage({ params }: PageProps) {
 				<div className="space-y-16">
 					{template.tasks.map((task, index) => (
 						<section key={task.id} className="relative pl-12 group">
-							<div className="absolute left-[18px] top-0 bottom-0 w-px bg-zinc-800 group-last:bg-transparent" />
+							<div className="absolute left-4.5 top-0 bottom-0 w-px bg-zinc-800 group-last:bg-transparent" />
 							<div className="absolute left-0 top-0 size-9 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center text-sm font-bold text-zinc-300 z-10">
 								{index + 1}
 							</div>

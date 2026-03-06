@@ -44,7 +44,6 @@ export default async function EmployeeProfilePage() {
 				</header>
 
 				<div className="space-y-10">
-					{/* Seção de Dados Pessoais */}
 					<section className="space-y-6">
 						<div className="flex items-center gap-3">
 							<div className="p-2 rounded-xl bg-zinc-900 border border-white/5 text-primary">
@@ -55,14 +54,13 @@ export default async function EmployeeProfilePage() {
 							</h2>
 						</div>
 
-						<div className="p-1 border border-white/5 bg-zinc-950/50 rounded-[32px]">
+						<div className="p-1 border border-white/5 bg-zinc-950/50 rounded-4xl">
 							<div className="p-8 bg-zinc-900/40 rounded-[28px]">
 								<ProfileForm user={session.user} />
 							</div>
 						</div>
 					</section>
 
-					{/* Seção de Segurança */}
 					<section className="space-y-6">
 						<div className="flex items-center gap-3">
 							<div className="p-2 rounded-xl bg-zinc-900 border border-white/5 text-emerald-500">
@@ -73,7 +71,7 @@ export default async function EmployeeProfilePage() {
 							</h2>
 						</div>
 
-						<div className="p-1 border border-white/5 bg-zinc-950/50 rounded-[32px]">
+						<div className="p-1 border border-white/5 bg-zinc-950/50 rounded-4xl">
 							<div className="p-8 bg-zinc-900/40 rounded-[28px]">
 								<PasswordForm />
 							</div>

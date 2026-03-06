@@ -18,7 +18,7 @@ interface CreateOrganizationsProps {
 }
 
 export async function createOrganizationsService(
-	props: CreateOrganizationsProps
+	props: CreateOrganizationsProps,
 ): Promise<CreateOrganizationsResponse> {
 	const { body, options } = props
 
@@ -26,14 +26,14 @@ export async function createOrganizationsService(
 		const response = await api.post<CreateOrganizationsResponse>(
 			'/organizations/register',
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

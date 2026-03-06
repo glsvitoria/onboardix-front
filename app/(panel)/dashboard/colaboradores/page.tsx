@@ -15,17 +15,13 @@ import { EmptyState } from '@/components/empty-state'
 const ITEMS_PER_PAGE_EMPLOYEES = 6
 const ITEMS_PER_PAGE_INVITATIONS = 6
 
-export default async function CollaboratorsPage({
-	searchParams,
-}: {
-	searchParams: Promise<{ page?: string }>
-}) {
-	const params = await searchParams
-	const currentPage = Number(params.page) || 1
-
+async function getCollaboratorsDate(
+	employeesCurrentPage: number,
+	invitationsCurrentPage: number,
+) {
 	const [employees, invitations] = await Promise.all([
 		listEmployeesService({
-			init: currentPage - 1,
+			init: (employeesCurrentPage - 1) * ITEMS_PER_PAGE_EMPLOYEES,
 			limit: ITEMS_PER_PAGE_EMPLOYEES,
 		}).catch((err: ServiceError) => ({
 			items: [],
@@ -34,7 +30,7 @@ export default async function CollaboratorsPage({
 		})),
 		listInvitationsService({
 			params: {
-				init: currentPage - 1,
+				init: (invitationsCurrentPage - 1) * ITEMS_PER_PAGE_INVITATIONS,
 				limit: ITEMS_PER_PAGE_INVITATIONS,
 			},
 		}).catch((err: ServiceError) => ({
@@ -43,6 +39,26 @@ export default async function CollaboratorsPage({
 			message: err.message,
 		})),
 	])
+
+	return {
+		employees,
+		invitations,
+	}
+}
+
+export default async function CollaboratorsPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ employeesPage?: string; invitationsPage?: string }>
+}) {
+	const params = await searchParams
+	const employeesCurrentPage = Number(params.employeesPage) || 1
+	const invitationsCurrentPage = Number(params.invitationsPage) || 1
+
+	const { employees, invitations } = await getCollaboratorsDate(
+		employeesCurrentPage,
+		invitationsCurrentPage,
+	)
 
 	const isEmployeesError = 'message' in employees
 	const isInvitationsError = 'message' in invitations
@@ -133,15 +149,15 @@ export default async function CollaboratorsPage({
 													isPendingAssignment
 														? 'bg-amber-500/10 text-amber-500'
 														: hasStarted
-														? 'bg-green-500/10 text-green-500'
-														: 'bg-zinc-800 text-zinc-500'
+															? 'bg-green-500/10 text-green-500'
+															: 'bg-zinc-800 text-zinc-500'
 												}`}
 											>
 												{isPendingAssignment
 													? 'Sem trilha'
 													: hasStarted
-													? 'Em progresso'
-													: 'Não iniciado'}
+														? 'Em progresso'
+														: 'Não iniciado'}
 											</Badge>
 										</div>
 
@@ -213,9 +229,10 @@ export default async function CollaboratorsPage({
 					)}
 
 					<Pagination
+						currentPage={employeesCurrentPage}
+            property='employeesPage'
 						totalItems={employees.total}
 						itemsPerPage={ITEMS_PER_PAGE_EMPLOYEES}
-						currentPage={currentPage}
 					/>
 				</TabsContent>
 
@@ -249,7 +266,7 @@ export default async function CollaboratorsPage({
 											</td>
 											<td className="px-6 py-4 text-sm text-zinc-400">
 												{new Date(invitation.createdAt).toLocaleDateString(
-													'pt-BR'
+													'pt-BR',
 												)}
 											</td>
 											<td className="px-6 py-4">
@@ -259,7 +276,7 @@ export default async function CollaboratorsPage({
 												>
 													<Clock size={12} />
 													{new Date(invitation.expiresAt).toLocaleDateString(
-														'pt-BR'
+														'pt-BR',
 													)}
 												</Badge>
 											</td>
@@ -290,9 +307,10 @@ export default async function CollaboratorsPage({
 					)}
 
 					<Pagination
+						currentPage={invitationsCurrentPage}
+            property='invitationsPage'
 						totalItems={invitations.total}
 						itemsPerPage={ITEMS_PER_PAGE_INVITATIONS}
-						currentPage={currentPage}
 					/>
 				</TabsContent>
 			</Tabs>

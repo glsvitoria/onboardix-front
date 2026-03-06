@@ -15,13 +15,29 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { myProgressEmployeesService } from '@/services/employees/my-progress'
+import { ServiceError } from '@/types/service-error'
+import { ErrorState } from '@/components/error-state'
+
+async function getOnboardingData() {
+	return myProgressEmployeesService({}).catch((err: ServiceError) => ({
+		message: err.message,
+	}))
+}
 
 export default async function OnboardingPage() {
 	const session = await getSession()
 
-	const data = await myProgressEmployeesService({})
+	const myProgress = await getOnboardingData()
 
-	if (!data || !data.userTasks || data.userTasks.length === 0) {
+	if ('message' in myProgress) {
+		return <ErrorState to="/onboarding">{myProgress.message}</ErrorState>
+	}
+
+	if (
+		!myProgress ||
+		!myProgress.userTasks ||
+		myProgress.userTasks.length === 0
+	) {
 		return (
 			<div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
 				<Rocket size={48} className="text-zinc-700 mb-6" />
@@ -123,14 +139,17 @@ export default async function OnboardingPage() {
 									Seu progresso atual
 								</span>
 								<p className="text-2xl font-bold text-white">
-									{data.percentage}% completo
+									{myProgress.percentage}% completo
 								</p>
 							</div>
 							<Badge className="bg-primary/10 text-primary border-none py-1 px-3">
-								{data.completed}/{data.total} Tasks
+								{myProgress.completed}/{myProgress.total} Tasks
 							</Badge>
 						</div>
-						<Progress value={data.percentage} className="h-3 bg-zinc-800" />
+						<Progress
+							value={myProgress.percentage}
+							className="h-3 bg-zinc-800"
+						/>
 					</div>
 				</section>
 
@@ -141,7 +160,7 @@ export default async function OnboardingPage() {
 					</h2>
 
 					<div className="grid grid-cols-1 gap-3">
-						{data.userTasks
+						{myProgress.userTasks
 							.sort((a, b) => (a.task.order || 0) - (b.task.order || 0))
 							.map((userTask) => (
 								<TaskItem key={userTask.id} userTask={userTask} />

@@ -15,6 +15,22 @@ import { Progress } from '@/components/ui/progress'
 import { notFound } from 'next/navigation'
 import { BackButton } from '@/components/back-button'
 import { showEmployeesService } from '@/services/employees/show'
+import { ServiceError } from '@/types/service-error'
+import { ErrorState } from '@/components/error-state'
+
+async function getCollaboratorDetailDate(id: string) {
+	return showEmployeesService({
+		params: {
+			employeeId: id,
+		},
+	}).catch((err: ServiceError) => {
+		if (err.status === 404) return notFound()
+
+		return {
+			message: err.message,
+		}
+	})
+}
 
 interface PageProps {
 	params: Promise<{ id: string }>
@@ -23,14 +39,14 @@ interface PageProps {
 export default async function CollaboratorDetailPage({ params }: PageProps) {
 	const { id } = await params
 
-	const employee = await showEmployeesService({
-		params: {
-			employeeId: id,
-		},
-	})
+	const employee = await getCollaboratorDetailDate(id)
 
-	if (!employee) {
-		notFound()
+	if ('message' in employee) {
+		return (
+			<ErrorState to={`/dashboard/colaboradores/${id}`}>
+				{employee.message}
+			</ErrorState>
+		)
 	}
 
 	const hasTasks = employee.userTasks.length > 0
@@ -88,7 +104,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 				<div className="space-y-6">
-					<div className="bg-zinc-900/40 border border-white/5 p-6 rounded-[32px] space-y-6">
+					<div className="bg-zinc-900/40 border border-white/5 p-6 rounded-4xl space-y-6">
 						<h3 className="text-white font-bold flex items-center gap-2">
 							<BarChart3 size={18} className="text-primary" /> Estatísticas
 						</h3>
@@ -120,7 +136,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 					</div>
 
 					{!hasTasks && (
-						<div className="bg-amber-500/5 border border-amber-500/10 p-6 rounded-[32px]">
+						<div className="bg-amber-500/5 border border-amber-500/10 p-6 rounded-4xl">
 							<div className="flex gap-3 text-amber-500 mb-2">
 								<AlertCircle size={20} />
 								<span className="font-bold text-sm">Ação Necessária</span>
@@ -149,7 +165,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 								.map((userTask) => (
 									<div
 										key={userTask.id}
-										className={`flex items-center justify-between p-5 rounded-[24px] border transition-all ${
+										className={`flex items-center justify-between p-5 rounded-3xl border transition-all ${
 											userTask.completedAt
 												? 'bg-green-500/3 border-green-500/10'
 												: 'bg-zinc-900/40 border-white/5'
@@ -179,7 +195,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 													<span className="text-[10px] text-zinc-600 flex items-center gap-1">
 														<Clock size={10} /> Concluído em{' '}
 														{new Date(userTask.completedAt).toLocaleDateString(
-															'pt-BR'
+															'pt-BR',
 														)}
 													</span>
 												)}
@@ -203,7 +219,7 @@ export default async function CollaboratorDetailPage({ params }: PageProps) {
 								<h4 className="text-white font-bold mb-2">
 									Nenhuma tarefa atribuída
 								</h4>
-								<p className="text-zinc-500 text-sm max-w-[300px] mb-8">
+								<p className="text-zinc-500 text-sm max-w-75 mb-8">
 									Este colaborador ainda não possui um roteiro. Comece
 									atribuindo um template existente.
 								</p>

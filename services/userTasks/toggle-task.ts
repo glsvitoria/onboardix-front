@@ -31,9 +31,9 @@ export async function toggleUserTasksService(
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message ||
+			error?.message ||
 				'Ocorreu um erro ao atualizar a tarefa. Tente novamente.',
-			error?.response?.status || 500,
+			error?.status || 500,
 		)
 	}
 }

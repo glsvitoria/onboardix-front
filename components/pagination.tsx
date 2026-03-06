@@ -5,15 +5,17 @@ import { Button } from '@/components/ui/button'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 interface PaginationProps {
-	totalItems: number
-	itemsPerPage: number
 	currentPage: number
+  property?: string
+	itemsPerPage: number
+	totalItems: number
 }
 
 export function Pagination({
+	currentPage,
+  property,
 	totalItems,
 	itemsPerPage,
-	currentPage,
 }: PaginationProps) {
 	const router = useRouter()
 	const pathname = usePathname()
@@ -25,7 +27,7 @@ export function Pagination({
 
 	const createPageUrl = (pageNumber: number) => {
 		const params = new URLSearchParams(searchParams)
-		params.set('page', pageNumber.toString())
+		params.set(property ? property :'page', pageNumber.toString())
 		return `${pathname}?${params.toString()}`
 	}
 

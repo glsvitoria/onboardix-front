@@ -2,6 +2,24 @@ import { notFound } from 'next/navigation'
 import { EditTemplateForm } from '../../components/edit-template-form'
 import { BackButton } from '@/components/back-button'
 import { showTemplatesService } from '@/services/templates/show'
+import { ServiceError } from '@/types/service-error'
+import { ErrorState } from '@/components/error-state'
+
+async function getEditTemplateData(id: string) {
+	const template = await showTemplatesService({
+		params: {
+			templateId: id,
+		},
+	}).catch((err: ServiceError) => {
+		if (err.status === 404) notFound()
+
+		return {
+			message: err.message,
+		}
+	})
+
+	return { template }
+}
 
 export default async function EditTemplatePage({
 	params,
@@ -10,19 +28,21 @@ export default async function EditTemplatePage({
 }) {
 	const { id } = await params
 
-	const template = await showTemplatesService({
-		params: {
-			templateId: id,
-		},
-	})
+	const { template } = await getEditTemplateData(id)
 
-	if (!template) {
-		notFound()
+	if ('message' in template) {
+		return (
+			<ErrorState to={`/dashboard/roteiros/${id}/edicao`}>
+				{template.message}
+			</ErrorState>
+		)
 	}
 
 	return (
 		<>
-			<BackButton to={`/dashboard/roteiros/${id}`}>Voltar para Roteiro</BackButton>
+			<BackButton to={`/dashboard/roteiros/${id}`}>
+				Voltar para Roteiro
+			</BackButton>
 
 			<header className="mb-8">
 				<h1 className="text-3xl font-bold text-white">Editar Roteiro</h1>

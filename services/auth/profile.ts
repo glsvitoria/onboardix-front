@@ -10,7 +10,7 @@ interface ProfileAuthProps {
 }
 
 export async function profileAuthService(
-	props: ProfileAuthProps
+	props: ProfileAuthProps,
 ): Promise<ProfileAuthResponse> {
 	const { options } = props
 	try {
@@ -19,8 +19,8 @@ export async function profileAuthService(
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

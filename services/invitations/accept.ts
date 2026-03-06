@@ -17,21 +17,21 @@ interface AcceptInvitationsProps {
 }
 
 export async function acceptInvitationsService(
-	props: AcceptInvitationsProps
+	props: AcceptInvitationsProps,
 ): Promise<AcceptInvitationsResponse> {
 	const { body, options } = props
 	try {
 		const response = await api.post<AcceptInvitationsResponse>(
 			'/invitations/accept',
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

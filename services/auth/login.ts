@@ -5,10 +5,10 @@ import { User } from '@/types/user'
 
 interface LoginAuthResponse {
 	accessToken: string
-  accessTokenExpiresAt: Date
+	accessTokenExpiresAt: Date
 	refreshToken: string
-  refreshTokenExpiresAt: Date
-  user: User
+	refreshTokenExpiresAt: Date
+	user: User
 }
 
 interface LoginAuthProps {
@@ -20,7 +20,7 @@ interface LoginAuthProps {
 }
 
 export async function loginAuthService(
-	props: LoginAuthProps
+	props: LoginAuthProps,
 ): Promise<LoginAuthResponse> {
 	const { body, options } = props
 
@@ -28,14 +28,14 @@ export async function loginAuthService(
 		const response = await api.post<LoginAuthResponse>(
 			'/auth/login',
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

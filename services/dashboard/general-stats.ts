@@ -19,21 +19,22 @@ interface GeneralStatsDashboardProps extends RequestOptionsService {
 }
 
 export async function generalStatsDashboardService(
-	props: GeneralStatsDashboardProps
+	props: GeneralStatsDashboardProps,
 ): Promise<GeneralStatsDashboardResponse> {
 	const { options } = props
 
 	try {
 		const response = await api.get<GeneralStatsDashboardResponse>(
 			'/dashboard/general-stats',
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message ||
+				'Ocorreu um erro ao buscar o histórico de tarefas da última semana.',
+			error?.status || 500,
 		)
 	}
 }

@@ -14,21 +14,21 @@ interface CreateInvitationsProps {
 }
 
 export async function createInvitationsService(
-	props: CreateInvitationsProps
+	props: CreateInvitationsProps,
 ): Promise<CreateInvitationsResponse> {
 	const { body, options } = props
 	try {
 		const response = await api.post<CreateInvitationsResponse>(
 			'/invitations',
 			body,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

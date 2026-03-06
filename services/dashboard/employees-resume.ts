@@ -24,7 +24,7 @@ interface EmployeesResumeDashboardProps extends RequestOptionsService {
 }
 
 export async function employeesResumeDashboardService(
-	props: EmployeesResumeDashboardProps
+	props: EmployeesResumeDashboardProps,
 ): Promise<EmployeesResumeDashboardResponse> {
 	const { params, options } = props
 
@@ -34,14 +34,15 @@ export async function employeesResumeDashboardService(
 			{
 				params,
 				...options,
-			}
+			},
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message ||
+				'Ocorreu um erro ao buscar o resumo dos colaboradores da organização.',
+			error?.status || 500,
 		)
 	}
 }

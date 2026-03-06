@@ -28,8 +28,8 @@ export async function updateProfileUsersService(
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500,
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

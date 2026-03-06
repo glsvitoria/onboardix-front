@@ -6,8 +6,40 @@ import { listTemplatesService } from '@/services/templates/list'
 import { ServiceError } from '@/types/service-error'
 import { EmptyState } from '@/components/empty-state'
 import { showEmployeesService } from '@/services/employees/show'
+import { ErrorState } from '@/components/error-state'
+import { notFound } from 'next/navigation'
 
 const ITEMS_PER_PAGE_TEMPLATES = 9
+
+async function getAssignTemplateData(currentPage: number, employeeId: string) {
+	const [templates, employee] = await Promise.all([
+		listTemplatesService({
+			init: (currentPage - 1) * ITEMS_PER_PAGE_TEMPLATES,
+			limit: ITEMS_PER_PAGE_TEMPLATES,
+		}).catch((err: ServiceError) => ({
+			items: [],
+			total: 0,
+			message: err.message,
+		})),
+		showEmployeesService({
+			params: {
+				employeeId,
+			},
+		}).catch((err: ServiceError) => {
+			if (err.status === 404) notFound()
+
+			return {
+				message: err.message,
+			}
+		}),
+	])
+
+	return {
+		templates,
+		employee,
+	}
+}
+
 interface PageProps {
 	params: Promise<{ id: string }>
 	searchParams: Promise<{ page?: string }>
@@ -21,21 +53,17 @@ export default async function AssignTemplatePage({
 	const { page } = await searchParams
 	const currentPage = Number(page) || 1
 
-	const [templates, employee] = await Promise.all([
-		listTemplatesService({
-			init: (currentPage - 1) * ITEMS_PER_PAGE_TEMPLATES,
-			limit: ITEMS_PER_PAGE_TEMPLATES,
-		}).catch((err: ServiceError) => ({
-			items: [],
-			total: 0,
-			message: err.message,
-		})),
-		showEmployeesService({
-			params: {
-				employeeId: id,
-			},
-		}),
-	])
+	const { employee, templates } = await getAssignTemplateData(currentPage, id)
+
+	const isTemplatesError = 'message' in templates
+
+	if ('message' in employee) {
+		return (
+			<ErrorState to={`/dashboard/colaboradores/${id}/atribuir`}>
+				{employee.message}
+			</ErrorState>
+		)
+	}
 
 	return (
 		<>
@@ -70,7 +98,11 @@ export default async function AssignTemplatePage({
 				)}
 			</div>
 
-			{templates.items.length === 0 ? (
+			{isTemplatesError ? (
+				<ErrorState to={`/dashboard/colaboradores/${id}/atribuir`}>
+					{templates.message}
+				</ErrorState>
+			) : templates.items.length === 0 ? (
 				<EmptyState
 					description="Você ainda não possui templates de onboarding criados para a sua
 						organização."
@@ -86,7 +118,7 @@ export default async function AssignTemplatePage({
 					{templates.items.map((template) => (
 						<div
 							key={template.id}
-							className="group bg-zinc-900/40 border border-white/5 p-6 rounded-[32px] flex items-center justify-between hover:border-primary/50 transition-all"
+							className="group bg-zinc-900/40 border border-white/5 p-6 rounded-4xl flex items-center justify-between hover:border-primary/50 transition-all"
 						>
 							<div className="flex items-center gap-5">
 								<div className="size-14 rounded-2xl bg-zinc-800 flex items-center justify-center text-zinc-500 group-hover:text-primary transition-colors">
@@ -108,7 +140,7 @@ export default async function AssignTemplatePage({
 				</div>
 			)}
 
-			{templates.items.length > 0 && (
+			{!isTemplatesError && templates.items.length > 0 && (
 				<div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-2xl flex gap-3 items-start">
 					<Info size={18} className="text-blue-500 shrink-0 mt-0.5" />
 					<p className="text-xs text-zinc-400 leading-relaxed">

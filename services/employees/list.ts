@@ -20,7 +20,7 @@ interface ListEmployeesProps {
 }
 
 export async function listEmployeesService(
-	props: ListEmployeesProps
+	props: ListEmployeesProps,
 ): Promise<ListEmployeesReturn> {
 	const { init, limit, options } = props
 	try {
@@ -32,7 +32,7 @@ export async function listEmployeesService(
 					limit,
 				},
 				...options,
-			}
+			},
 		)
 
 		return {
@@ -41,8 +41,8 @@ export async function listEmployeesService(
 		}
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

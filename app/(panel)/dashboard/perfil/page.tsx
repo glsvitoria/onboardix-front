@@ -28,7 +28,6 @@ export default async function ProfilePage() {
 			</div>
 
 			<div className="grid gap-8">
-				{/* Seção 1: Dados Pessoais */}
 				<section className="bg-[#09090b] border border-white/5 rounded-3xl p-8">
 					<div className="flex items-center gap-3 mb-8">
 						<div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -41,7 +40,6 @@ export default async function ProfilePage() {
 					<ProfileForm user={session?.user} />
 				</section>
 
-				{/* Seção 2: Organização (Somente Leitura) */}
 				<section className="bg-[#09090b] border border-white/5 rounded-3xl p-8 opacity-80">
 					<div className="flex items-center gap-3 mb-6">
 						<div className="p-2 rounded-lg bg-blue-500/10 text-blue-500">
@@ -74,7 +72,6 @@ export default async function ProfilePage() {
 					</p>
 				</section>
 
-				{/* Seção 3: Segurança */}
 				<section className="bg-[#09090b] border border-white/5 rounded-3xl p-8">
 					<div className="flex items-center gap-3 mb-8">
 						<div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">

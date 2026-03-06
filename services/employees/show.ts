@@ -13,21 +13,21 @@ interface ShowEmployeesProps {
 }
 
 export async function showEmployeesService(
-	props: ShowEmployeesProps
+	props: ShowEmployeesProps,
 ): Promise<ShowEmployeesResponse> {
 	const { params, options } = props
 
 	try {
 		const response = await api.get<ShowEmployeesResponse>(
 			`/employees/${params.employeeId}/detail`,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || 'Ocorreu um erro ao buscar os dados do colaborador.',
+			error?.status || 500,
 		)
 	}
 }

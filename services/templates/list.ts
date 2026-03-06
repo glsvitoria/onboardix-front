@@ -20,7 +20,7 @@ interface ListTemplatesProps {
 }
 
 export async function listTemplatesService(
-	props: ListTemplatesProps
+	props: ListTemplatesProps,
 ): Promise<ListTemplatesReturn> {
 	const { init, limit, options } = props
 	try {
@@ -32,7 +32,7 @@ export async function listTemplatesService(
 					limit,
 				},
 				...options,
-			}
+			},
 		)
 
 		return {
@@ -41,8 +41,8 @@ export async function listTemplatesService(
 		}
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

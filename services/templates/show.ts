@@ -13,20 +13,20 @@ interface ShowTemplatesProps {
 }
 
 export async function showTemplatesService(
-	props: ShowTemplatesProps
+	props: ShowTemplatesProps,
 ): Promise<ShowTemplatesResponse> {
 	const { params, options } = props
 	try {
 		const response = await api.get<ShowTemplatesResponse>(
 			`/templates/${params.templateId}`,
-			options
+			options,
 		)
 
 		return response
 	} catch (error: any) {
 		throw new ServiceError(
-			error?.response?.data?.message || error?.message,
-			error?.response?.status || 500
+			error?.message || error?.message,
+			error?.status || 500,
 		)
 	}
 }

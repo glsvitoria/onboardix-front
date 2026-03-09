@@ -3,7 +3,7 @@ import { RequestOptionsService } from '@/lib/api/types'
 import { ServiceError } from '@/types/service-error'
 import { User } from '@/types/user'
 
-interface LoginAuthResponse {
+interface ValidateAuthResponse {
 	accessToken: string
 	accessTokenExpiresAt: string
 	refreshToken: string
@@ -11,23 +11,19 @@ interface LoginAuthResponse {
 	user: User
 }
 
-interface LoginAuthProps {
-	body: {
-		email: string
-		password: string
-	}
+interface ValidateAuthProps {
 	options?: RequestOptionsService
 }
 
-export async function loginAuthService(
-	props: LoginAuthProps,
-): Promise<LoginAuthResponse> {
-	const { body, options } = props
+export async function validateAuthService(
+	props: ValidateAuthProps,
+): Promise<ValidateAuthResponse> {
+	const {  options } = props
 
 	try {
-		const response = await api.post<LoginAuthResponse>(
-			'/auth/login',
-			body,
+		const response = await api.post<ValidateAuthResponse>(
+			'/auth/validate',
+			{},
 			options,
 		)
 

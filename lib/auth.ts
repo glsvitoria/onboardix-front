@@ -21,7 +21,7 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
 			user: response,
 			token,
 		}
-	} catch {
+	} catch(err) {
 		redirect('/api/auth/logout')
 	}
 }

@@ -5,7 +5,6 @@ import { formatZodErrors } from '@/lib/format-zod-errors'
 import { assignTemplateEmployeesService } from '@/services/employees/assign-template'
 import { ActionState } from '@/types/action-state'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import z from 'zod'
 
 const acceptInvitationSchema = z.object({
@@ -17,35 +16,33 @@ type State = ActionState<typeof acceptInvitationSchema>
 
 export async function assignTemplateAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ) {
 	const rawData = Object.fromEntries(formData.entries())
 
 	const validatedFields = acceptInvitationSchema.safeParse(rawData)
 
 	if (!validatedFields.success) {
-		console.log(formatZodErrors(validatedFields))
 		return {
 			errors: formatZodErrors(validatedFields),
 			inputs: rawData,
-      timestamp: Date.now(),
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
 
 	try {
-		const {message} = await assignTemplateEmployeesService({
+		const { message } = await assignTemplateEmployeesService({
 			params: validatedFields.data,
 		})
 
 		revalidatePath(`/dashboard/colaboradores/${validatedFields.data.userId}`)
 
-    return {
-      timestamp: Date.now(),
-      message,
-      success: true,
-    }
-    
+		return {
+			timestamp: Date.now(),
+			message,
+			success: true,
+		}
 	} catch (error: any) {
 		return handleApiError({
 			error,

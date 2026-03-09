@@ -1,7 +1,9 @@
-// src/lib/api/fetch-adapter.ts
 import { cookies } from 'next/headers'
 import { ACCESS_TOKEN } from '@/common/token'
 import { IApiAdapter, RequestOptions } from './types'
+import { getCookieData } from '../get-cookie-data'
+import { headers as nextHeaders } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -13,17 +15,19 @@ export const fetchAdapter: IApiAdapter = {
 
 		if (params) {
 			Object.entries(params).forEach(([key, val]) =>
-				url.searchParams.append(key, String(val))
+				url.searchParams.append(key, String(val)),
 			)
 		}
 
-		const token = (await cookies()).get(ACCESS_TOKEN)?.value
+		const accessToken = getCookieData(
+			(await cookies()).get(ACCESS_TOKEN)?.value,
+		)
 
 		const config: RequestInit = {
 			...rest,
 			headers: {
 				'Content-Type': 'application/json',
-				...(token && { Authorization: `Bearer ${token}` }),
+				...(accessToken && { Authorization: `Bearer ${accessToken?.value}` }),
 				...headers,
 			},
 			body: body ? JSON.stringify(body) : undefined,
@@ -31,8 +35,26 @@ export const fetchAdapter: IApiAdapter = {
 
 		const response = await fetch(url.toString(), config)
 
+		if (response.status === 401 && endpoint !== '/auth/refresh') {
+			const headersList = await nextHeaders()
+
+			const referer = headersList.get('referer')
+
+			let callbackPart = ''
+			if (referer) {
+				try {
+					const urlObj = new URL(referer)
+					callbackPart = `?callbackUrl=${encodeURIComponent(urlObj.pathname + urlObj.search)}`
+				} catch (e) {
+					callbackPart = ''
+				}
+			}
+
+			redirect(`/api/auth/refresh${callbackPart}`)
+		}
+
 		if (!response.ok) {
-			const errorData = await response.json()
+			const errorData = await response.json().catch(() => ({}))
 
 			throw {
 				message:

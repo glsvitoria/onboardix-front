@@ -8,6 +8,7 @@ import { ServiceError } from '@/types/service-error'
 import { listTemplatesService } from '@/services/templates/list'
 import { ErrorState } from '@/components/error-state'
 import { EmptyState } from '@/components/empty-state'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
 const ITEMS_PER_PAGE = 9
 
@@ -15,11 +16,17 @@ async function getTemplatesData(currentPage: number) {
 	const templates = await listTemplatesService({
 		init: (currentPage - 1) * ITEMS_PER_PAGE,
 		limit: ITEMS_PER_PAGE,
-	}).catch((err: ServiceError) => ({
-		items: [],
-		total: 0,
-		message: err.message,
-	}))
+	}).catch((err) => {
+		if (isRedirectError(err)) {
+			throw err
+		}
+
+		return {
+			items: [],
+			total: 0,
+			message: err.message || 'Erro ao carregar templates',
+		}
+	})
 
 	return { templates }
 }

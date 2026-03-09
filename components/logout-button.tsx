@@ -47,7 +47,7 @@ export function LogoutButton({
 				)}
 			</DialogTrigger>
 
-			<DialogContent className="bg-[#09090b] border-white/10 rounded-[32px] sm:rounded-[32px] max-w-sm">
+			<DialogContent className="bg-[#09090b] border-white/10 rounded-4xl max-w-sm">
 				<DialogHeader>
 					<DialogTitle className="text-xl font-bold text-zinc-100">
 						Sair da conta?

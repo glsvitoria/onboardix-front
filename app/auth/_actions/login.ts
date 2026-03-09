@@ -3,11 +3,11 @@
 import { ActionState } from '@/types/action-state'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/common/token'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { handleApiError } from '@/lib/api/handle-error'
 import { loginAuthService } from '@/services/auth/login'
 import { UserRole } from '@/types/user'
+import { CookieToken } from '@/types/token'
 
 const loginSchema = z.object({
 	email: z.string().email('E-mail inválido'),
@@ -18,7 +18,7 @@ type State = ActionState<typeof loginSchema>
 
 export async function loginAction(
 	_prevState: State | null,
-	formData: FormData
+	formData: FormData,
 ): Promise<State> {
 	const rawInput = Object.fromEntries(formData.entries())
 	const validatedFields = loginSchema.safeParse(rawInput)
@@ -27,7 +27,7 @@ export async function loginAction(
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			inputs: rawInput,
-      timestamp: Date.now(),
+			timestamp: Date.now(),
 			success: false,
 		}
 	}
@@ -38,7 +38,7 @@ export async function loginAction(
 			accessTokenExpiresAt,
 			refreshToken,
 			refreshTokenExpiresAt,
-      user
+			user,
 		} = await loginAuthService({
 			body: validatedFields.data,
 		})
@@ -52,26 +52,36 @@ export async function loginAction(
 			sameSite: 'lax' as const,
 		}
 
-		cookieStore.set(ACCESS_TOKEN, accessToken, {
-			...cookieOptions,
-			expires: new Date(accessTokenExpiresAt),
-		})
+		cookieStore.set(
+			ACCESS_TOKEN,
+			JSON.stringify({
+				value: accessToken,
+				expiresAt: accessTokenExpiresAt,
+			} as CookieToken),
+			{
+				...cookieOptions,
+				expires: new Date(accessTokenExpiresAt),
+			},
+		)
 
-		cookieStore.set(REFRESH_TOKEN, refreshToken, {
-			...cookieOptions,
-			expires: new Date(refreshTokenExpiresAt),
-		})
+		cookieStore.set(
+			REFRESH_TOKEN,
+			JSON.stringify({ value: refreshToken, expiresAt: refreshTokenExpiresAt }),
+			{
+				...cookieOptions,
+				expires: new Date(refreshTokenExpiresAt),
+			},
+		)
 
-    return {
-      timestamp: Date.now(),
-      message: `Login de ${user.role === UserRole.MEMBER ? 'colaborador' : 'usuário'} realizado com sucesso`,
-      success: true,
-    }
+		return {
+			timestamp: Date.now(),
+			message: `Login de ${user.role === UserRole.MEMBER ? 'colaborador' : 'usuário'} realizado com sucesso`,
+			success: true,
+		}
 	} catch (error: any) {
 		return handleApiError({
 			error,
 			inputs: rawInput,
 		})
 	}
-
 }

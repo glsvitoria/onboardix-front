@@ -6,7 +6,6 @@ interface GeneralStatsDashboardResponse {
 	cards: {
 		totalEmployees: number
 		avgProgress: string
-		completionRate: number
 	}
 	charts: {
 		taskDistribution: { name: string; value: number }[]

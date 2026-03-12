@@ -151,7 +151,7 @@ export const DashboardMockup = () => {
 									>
 										<div
 											className={cn(
-												'w-full max-w-[40px] bg-primary/10 border-t-2 border-primary/40 rounded-t-lg transition-all duration-500 group-hover:bg-primary/20 group-hover:border-primary',
+												'w-full max-w-10 bg-primary/10 border-t-2 border-primary/40 rounded-t-lg transition-all duration-500 group-hover:bg-primary/20 group-hover:border-primary',
 												`h-${item.count}`
 											)}
 										/>

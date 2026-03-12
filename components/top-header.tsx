@@ -50,6 +50,7 @@ export function TopHeader({ user }: TopHeaderProps) {
 
 	const initials = user.fullName
 		.split(' ')
+    .slice(0, 2)
 		.map((n) => n[0])
 		.join('')
 		.toUpperCase()
@@ -108,7 +109,7 @@ export function TopHeader({ user }: TopHeaderProps) {
 							)}
 						</div>
 
-						<div className="max-h-[300px] overflow-y-auto p-2">
+						<div className="max-h-75 overflow-y-auto p-2">
 							{query.length < 2 && !loading && (
 								<p className="p-4 text-center text-xs text-zinc-500">
 									Digite pelo menos 2 caracteres...

@@ -1,4 +1,4 @@
-import { Users, CheckCircle2, BarChart3, TrendingUp } from 'lucide-react'
+import { Users, CheckCircle2, BarChart3, TrendingUp, Clock } from 'lucide-react'
 import { StatCard } from './_components/stat-card'
 import { HeaderPage } from './_components/header'
 import { employeesResumeDashboardService } from '@/services/dashboard/employees-resume'
@@ -38,10 +38,10 @@ async function getDashboardData(currentPage: number) {
 			cards: {
 				totalEmployees: 0,
 				avgProgress: 0,
-				completionRate: 0,
 			},
 			charts: {
 				history: [],
+				taskDistribution: [],
 			},
 			message: err.message,
 		})),
@@ -95,10 +95,14 @@ export default async function DashboardPage({
 						color="text-emerald-500"
 					/>
 					<StatCard
-						title="Taxa de Conclusão"
-						value={`${generalStats.cards.completionRate}%`}
-						icon={CheckCircle2}
-						color="text-purple-500"
+						title="Tarefas Pendentes"
+						value={
+							generalStats.charts.taskDistribution.find(
+								(t) => t.name === 'Pendentes',
+							)?.value || 0
+						}
+						icon={Clock} 
+						color="text-amber-500"
 					/>
 					<StatCard
 						title="Membros Ativos"

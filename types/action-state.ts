@@ -6,6 +6,7 @@ export interface ActionState<T extends z.ZodType<any, any, any>> {
 	}
 	inputs?: Partial<z.infer<T>>
 	message?: string
+	data?: any
 	success: boolean
 	timestamp: number
 }

@@ -35,7 +35,9 @@ export const fetchAdapter: IApiAdapter = {
 
 		const response = await fetch(url.toString(), config)
 
-		if (response.status === 401 && endpoint !== '/auth/refresh') {
+    const isAuthRoute = endpoint.includes('/auth/login') || endpoint === '/auth/refresh'
+
+		if (response.status === 401 && !isAuthRoute) {
 			const headersList = await nextHeaders()
 
 			const referer = headersList.get('referer')

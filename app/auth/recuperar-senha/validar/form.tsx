@@ -23,7 +23,7 @@ export const FormValidateCode = ({ email }: { email?: string }) => {
 	)
 
 	useActionToast(state, () => {
-		router.push(`/forgot-password/reset?token=${state?.data?.token}`)
+		router.push(`/auth/recuperar-senha/alterar?token=${state?.data?.token}`)
 	})
 
 	return (

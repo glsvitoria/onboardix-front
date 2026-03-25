@@ -47,7 +47,7 @@ export const FormLogin = () => {
 				/>
 				<div className="flex justify-end">
 					<Link
-						href="/forgot-password"
+						href="/auth/recuperar-senha"
 						className="text-[11px] text-primary hover:underline font-medium"
 					>
 						Esqueceu a senha?

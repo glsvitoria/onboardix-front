@@ -35,6 +35,7 @@ export async function forgotPasswordAction(
 		})
 
 		return {
+      inputs: rawInput,
 			timestamp: Date.now(),
 			message,
 			success: true,

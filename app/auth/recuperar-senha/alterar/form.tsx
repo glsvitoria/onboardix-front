@@ -17,7 +17,7 @@ export const FormResetPassword = ({ token }: { token?: string }) => {
 	)
 
 	useActionToast(state, () => {
-		router.push('/login?reset=success')
+		router.push('/auth?reset=success')
 	})
 
 	return (
